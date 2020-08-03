@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../static/framework/layuimini/layuimini/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../static/framework/layuimini/layuimini/css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>任务进度综合统计</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">任务单号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="taskid" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">委托人</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="maker" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">单据日期</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" id="createDate" placeholder=" - ">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">测试名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="testName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">测试组</label>
+                            <div class="layui-input-inline">
+                                <select name="testGroup" lay-verify="" lay-search>
+                                    <option value="000"></option>
+                                    <option value="001">测试一组</option>
+                                    <option value="002">测试二组</option>
+                                    <option value="003">测试三组</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <!--
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="sample"> 样品接收跳转 </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="plan"> 计划排程跳转 </button>
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="distribution"> 任务分配跳转 </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="testing"> 试验中跳转 </button>
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="engineer"> 工程师跳转 </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="report"> 报告签发跳转 </button>
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="taskend"> 任务终止 </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="resultModify"> 结果修正 </button>
+            </div>
+        </script>
+        -->
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <!--
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+        -->
+
+    </div>
+</div>
+<script src="../../static/framework/layuimini/layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table','layer','laydate'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            util = layui.util,
+            layer = layui.layer,
+            laydate = layui.laydate;
+
+
+        //日期选择器
+        //日期范围
+        laydate.render({
+            elem: '#createDate'
+            ,range: true
+        });
+
+        //var util = layui.util;
+        table.render({
+            elem: '#currentTableId',
+            url: '/AllTaskProgess',
+            method:'post',
+            toolbar: '#toolbarDemo',
+            request: {
+                pageName: 'page' //页码的参数名称，默认：page
+                , limitName: 'limit' //每页数据量的参数名，默认：limit
+            },
+            response: {
+                statusName: 'code' //数据状态的字段名称，默认：code
+                , statusCode: 0 //成功的状态码，默认：0
+                , countName: 'totals' //数据总数的字段名称，默认：count
+                , dataName: 'list' //数据列表的字段名称，默认：data
+            },
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [
+                [
+                    /*
+                    {type: "checkbox", width: 50},
+                    {field: 'project', width: 165, title: '任务单号', sort: true},
+                    {field: 'taskId', width: 200, title: '所属委托单', sort: true},
+                    {field: 'taskReportedName', width: 165, title: '任务名称', sort: true},
+                    {field: 'analysis', width: 200, title: '分析模板', sort: true},
+                    {field: 'testNumber', width: 80, title: '测试号', sort: true},
+                    {field: 'planTestTime', width: 80, title: '预计测试时间', sort: true},
+                    {field: 'lab', width: 150, title: '测试小组', sort: true}
+                     */
+                    {field: 'taskId', width: 165, title: '任务单号', sort: true},
+                    {field: 'taskReportedName', width: 165, title: '任务报告名称', sort: true},
+                    {field: 'productSeries', width: 165, title: '产品系列', sort: true},
+                    {field: 'testGroup', width: 140, title: '测试组', sort: true},
+                    {field: 'assginTo', width: 80, title: '测试员', sort: true},
+                    {field: 'actureStartDate', width: 120, title: '实际开始日期', sort: true},
+                    {field: 'actureEndDate', width: 120, title: '实际结束日期', sort: true},
+                    {field: 'reviewedOn', width: 120, title: '复核时间', sort: true},
+                    {field: 'rptAuthorizedOn', width: 120, title: '报告签发时间', sort: true},
+                    {field: 'dateReceived', width: 120, title: '样品接收日期', sort: true },
+                    {field: 'template', width: 120, title: '委托类型', sort: true},
+                    {field: 'tSourceCustomer', width: 165, title: '付费单位', sort: true},
+                    {field: 'customerContact', width: 80, title: '联系人', sort: true},
+                    {field: 'customer', width: 165, title: '客户名称', sort: true, hide:true},
+                    {field: 'name', width: 165, title: '委托单号', sort: true, hide:true},
+                    {field: 'priority', width: 165, title: '优先级', sort: true, hide:true},
+                    {field: 'commonName', width: 165, title: '常用名称', sort: true, hide:true},
+                    {field: 'reportName', width: 100, title: '试验类别', sort: true, hide:true},
+                    {field: 'assignedSampleQuantity', width: 165, title: '样品数量', sort: true, hide:true},
+                    {field: 'condition', width: 165, title: '测试条件', sort: true, hide:true},
+                    {field: 'instArrangeNo', width: 165, title: '排程仪器', sort: true, hide:true},
+                    {field: 'conclusion', width: 165, title: '测试结果', sort: true, hide:true},
+                    {field: 'dateCreated', width: 120, title: '委托日期', sort: true, hide:true},
+                    //,templet: function (d) { return util.toDateString(d.dateReceived * 1000, "yyyy-mm-dd") }
+                    {field: 'planStartDate', width: 120, title: '计划开始日期', sort: true, hide:true},
+                    {field: 'planEndDate', width: 120, title: '计划结束日期', sort: true, hide:true},
+                    {field: 'predictEndDate', width: 120, title: '预计结束日期', sort: true, hide:true},
+                    {field: 'rptAuthorizedBy', width: 80, title: '报告签发人', sort: true, hide:true},
+                    {field: 'quotes', width: 165, title: '报价单金额', sort: true, hide:true},
+                    {field: 'actualFee', width: 165, title: '实际费用', sort: true, hide:true},
+                    {field: 'title', width: 165, title: '委托单名称', sort: true, hide:true},
+                    {field: 'seqNum', width: 165, title: '主键', sort: true, hide:true},
+                    {field: 'ts', width: 165, title: '时间戳', sort: true, hide:true}
+                ]
+            ],
+            limit: 10,
+            limits: [10, 20, 30, 40, 50, 100, 500, 1000, 2000, 3000],
+            page: true,
+            skin: 'line'
+
+        });
+
+
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var result = JSON.stringify(data.field);
+            //layer.alert(data.field);
+
+            console.log($("#createDate").val());
+            console.log($("#testName").val());
+            console.log(data);
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    keyword: result
+                }
+            }, 'list');
+
+            return false;
+        });
+
+        /**
+         * toolbar监听事件
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            var checkStatus = table.checkStatus('currentTableId')
+                , data = checkStatus.data;
+
+            if (obj.event === 'sample') {  // 监听样品管理员跳转
+                layer.confirm('确定将任务转换至样品接收状态吗？', function (index) {
+                    //layer.alert(JSON.stringify(data));
+                    $.ajax({
+                        type:"post",
+                        url:"/lims/updateToSign",
+                        data:JSON.stringify(data),
+                        contentType:"application/json;charset=utf-8",
+                        dataType:"json",
+                        success:function(res){
+                            console.log(res);
+                            layer.alert('跳转成功');
+                        }
+                    });
+                });
+            };
+            if (obj.event === 'plan') {  // 监听排程跳转
+                layer.confirm('确定将任务转换至计划排程状态吗？', function (index) {
+                    $.ajax({
+                        type:"post",
+                        url:"/lims/updateToPlan",
+                        data:JSON.stringify(data),
+                        contentType:"application/json;charset=utf-8",
+                        dataType:"json",
+                        success:function(res){
+                            console.log(res);
+                            layer.alert('跳转成功');
+                        }
+                    });
+                });
+            };
+            if (obj.event === 'distribution') {  // 监听任务分配操作
+                layer.confirm('确定将任务转换至任务分配状态吗？', function (index) {
+                    $.ajax({
+                        type:"post",
+                        url:"/lims/updateToBistribution",
+                        data:JSON.stringify(data),
+                        contentType:"application/json;charset=utf-8",
+                        dataType:"json",
+                        success:function(res){
+                            console.log(res);
+                            layer.alert('跳转成功');
+                        }
+                    });
+                });
+            };
+            if (obj.event === 'testing') {  // 监听实验中操作
+                layer.confirm('确定将任务转换至试验中状态吗？', function (index) {
+                    $.ajax({
+                        type:"post",
+                        url:"/lims/updateToTesting",
+                        data:JSON.stringify(data),
+                        contentType:"application/json;charset=utf-8",
+                        dataType:"json",
+                        success:function(res){
+                            console.log(res);
+                            layer.alert('跳转成功');
+                        }
+                    });
+                });
+            };
+            if (obj.event === 'engineer') {  // 监听删除操作
+                layer.confirm('确定将任务转换至工程师复核状态吗？', function (index) {
+                    $.ajax({
+                        type:"post",
+                        url:"/lims/updateToEngineer",
+                        data:JSON.stringify(data),
+                        contentType:"application/json;charset=utf-8",
+                        dataType:"json",
+                        success:function(res){
+                            console.log(res);
+                            layer.alert('跳转成功');
+                        }
+                    });
+                });
+            };
+            if (obj.event === 'report') {  // 监听删除操作
+                layer.confirm('确定将任务转换至报告签发状态吗？', function (index) {
+                    $.ajax({
+                        type:"post",
+                        url:"/lims/updateToReport",
+                        data:JSON.stringify(data),
+                        contentType:"application/json;charset=utf-8",
+                        dataType:"json",
+                        success:function(res){
+                            console.log(res);
+                            layer.alert('跳转成功');
+                        }
+                    });
+                });
+            };
+            if (obj.event === 'taskend') {  // 监听删除操作
+                layer.confirm('确定将任务取消吗？', function (index) {
+                    $.ajax({
+                        type:"post",
+                        url:"/lims/updateToTaskend",
+                        data:JSON.stringify(data),
+                        contentType:"application/json;charset=utf-8",
+                        dataType:"json",
+                        success:function(res){
+                            console.log(res);
+                            layer.alert('跳转成功');
+                        }
+                    });
+                });
+            };
+
+            //resultModify新增任务修正
+            if (obj.event === 'resultModify') {  // 监听删除操作
+                layer.confirm('确定修正任务结果吗？', function (index) {
+                    var loading = layer.load(2);
+                    $.ajax({
+                        type:"post",
+                        url:"/lims/resultModify",
+                        data:JSON.stringify(data),
+                        contentType:"application/json;charset=utf-8",
+                        dataType:"json",
+                        success:function(res){
+                            console.log(res);
+                            layer.close(loading);
+                            if (res == -1){
+                                layer.alert('修正失败');
+                            }else {
+                                layer.alert('修正成功');
+                            }
+
+                        }
+                    });
+
+                });
+            };
+
+
+
+
+        });
+
+
+
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+
+                var index = layer.open({
+                    title: '编辑用户',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '../page/table/edit.html',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            }
+        });
+
+    });
+</script>
+
+</body>
+</html>

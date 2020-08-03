@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.besbing.Dao.NcTaskAddunionMapper">
+  <resultMap id="BaseResultMap" type="cn.besbing.Entities.NcTaskAddunion">
+    <id column="PK_TASK_ADDUNION" jdbcType="CHAR" property="pkTaskAddunion" />
+    <result column="NC_TASK_ADDCODE" jdbcType="CHAR" property="ncTaskAddcode" />
+    <result column="NC_TASK_ADDNAME" jdbcType="CHAR" property="ncTaskAddname" />
+    <result column="NC_TESTLIST_NAME" jdbcType="VARCHAR" property="ncTestlistName" />
+    <result column="NC_ANALYSIS_METHOD" jdbcType="VARCHAR" property="ncAnalysisMethod" />
+    <result column="NC_REPORT_NAME" jdbcType="VARCHAR" property="ncReportName" />
+    <result column="NC_TASK_TYPE" jdbcType="VARCHAR" property="ncTaskType" />
+    <result column="NC_TASK_DES" jdbcType="VARCHAR" property="ncTaskDes" />
+    <result column="NC_TASK_NAME" jdbcType="VARCHAR" property="ncTaskName" />
+    <result column="NC_INCLUDE_PROTYPE" jdbcType="VARCHAR" property="ncIncludeProtype" />
+    <result column="NC_CB_PLAN" jdbcType="CHAR" property="ncCbPlan" />
+    <result column="NC_ORDER_NUMBER" jdbcType="DECIMAL" property="ncOrderNumber" />
+    <result column="def1" jdbcType="VARCHAR" property="def1" />
+    <result column="def2" jdbcType="VARCHAR" property="def2" />
+    <result column="def3" jdbcType="VARCHAR" property="def3" />
+    <result column="def4" jdbcType="VARCHAR" property="def4" />
+    <result column="def5" jdbcType="VARCHAR" property="def5" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    PK_TASK_ADDUNION, NC_TASK_ADDCODE, NC_TASK_ADDNAME, NC_TESTLIST_NAME, NC_ANALYSIS_METHOD, 
+    NC_REPORT_NAME, NC_TASK_TYPE, NC_TASK_DES, NC_TASK_NAME, NC_INCLUDE_PROTYPE, NC_CB_PLAN, 
+    NC_ORDER_NUMBER, def1, def2, def3, def4, def5
+  </sql>
+  <select id="selectByExample" parameterType="cn.besbing.Entities.NcTaskAddunionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from NC_TASK_ADDUNION
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from NC_TASK_ADDUNION
+    where PK_TASK_ADDUNION = #{pkTaskAddunion,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from NC_TASK_ADDUNION
+    where PK_TASK_ADDUNION = #{pkTaskAddunion,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.besbing.Entities.NcTaskAddunionExample">
+    delete from NC_TASK_ADDUNION
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.besbing.Entities.NcTaskAddunion">
+    insert into NC_TASK_ADDUNION (PK_TASK_ADDUNION, NC_TASK_ADDCODE, NC_TASK_ADDNAME, 
+      NC_TESTLIST_NAME, NC_ANALYSIS_METHOD, NC_REPORT_NAME, 
+      NC_TASK_TYPE, NC_TASK_DES, NC_TASK_NAME, 
+      NC_INCLUDE_PROTYPE, NC_CB_PLAN, NC_ORDER_NUMBER, 
+      def1, def2, def3, def4, 
+      def5)
+    values (#{pkTaskAddunion,jdbcType=CHAR}, #{ncTaskAddcode,jdbcType=CHAR}, #{ncTaskAddname,jdbcType=CHAR}, 
+      #{ncTestlistName,jdbcType=VARCHAR}, #{ncAnalysisMethod,jdbcType=VARCHAR}, #{ncReportName,jdbcType=VARCHAR}, 
+      #{ncTaskType,jdbcType=VARCHAR}, #{ncTaskDes,jdbcType=VARCHAR}, #{ncTaskName,jdbcType=VARCHAR}, 
+      #{ncIncludeProtype,jdbcType=VARCHAR}, #{ncCbPlan,jdbcType=CHAR}, #{ncOrderNumber,jdbcType=DECIMAL}, 
+      #{def1,jdbcType=VARCHAR}, #{def2,jdbcType=VARCHAR}, #{def3,jdbcType=VARCHAR}, #{def4,jdbcType=VARCHAR}, 
+      #{def5,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.besbing.Entities.NcTaskAddunion">
+    insert into NC_TASK_ADDUNION
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pkTaskAddunion != null">
+        PK_TASK_ADDUNION,
+      </if>
+      <if test="ncTaskAddcode != null">
+        NC_TASK_ADDCODE,
+      </if>
+      <if test="ncTaskAddname != null">
+        NC_TASK_ADDNAME,
+      </if>
+      <if test="ncTestlistName != null">
+        NC_TESTLIST_NAME,
+      </if>
+      <if test="ncAnalysisMethod != null">
+        NC_ANALYSIS_METHOD,
+      </if>
+      <if test="ncReportName != null">
+        NC_REPORT_NAME,
+      </if>
+      <if test="ncTaskType != null">
+        NC_TASK_TYPE,
+      </if>
+      <if test="ncTaskDes != null">
+        NC_TASK_DES,
+      </if>
+      <if test="ncTaskName != null">
+        NC_TASK_NAME,
+      </if>
+      <if test="ncIncludeProtype != null">
+        NC_INCLUDE_PROTYPE,
+      </if>
+      <if test="ncCbPlan != null">
+        NC_CB_PLAN,
+      </if>
+      <if test="ncOrderNumber != null">
+        NC_ORDER_NUMBER,
+      </if>
+      <if test="def1 != null">
+        def1,
+      </if>
+      <if test="def2 != null">
+        def2,
+      </if>
+      <if test="def3 != null">
+        def3,
+      </if>
+      <if test="def4 != null">
+        def4,
+      </if>
+      <if test="def5 != null">
+        def5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pkTaskAddunion != null">
+        #{pkTaskAddunion,jdbcType=CHAR},
+      </if>
+      <if test="ncTaskAddcode != null">
+        #{ncTaskAddcode,jdbcType=CHAR},
+      </if>
+      <if test="ncTaskAddname != null">
+        #{ncTaskAddname,jdbcType=CHAR},
+      </if>
+      <if test="ncTestlistName != null">
+        #{ncTestlistName,jdbcType=VARCHAR},
+      </if>
+      <if test="ncAnalysisMethod != null">
+        #{ncAnalysisMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="ncReportName != null">
+        #{ncReportName,jdbcType=VARCHAR},
+      </if>
+      <if test="ncTaskType != null">
+        #{ncTaskType,jdbcType=VARCHAR},
+      </if>
+      <if test="ncTaskDes != null">
+        #{ncTaskDes,jdbcType=VARCHAR},
+      </if>
+      <if test="ncTaskName != null">
+        #{ncTaskName,jdbcType=VARCHAR},
+      </if>
+      <if test="ncIncludeProtype != null">
+        #{ncIncludeProtype,jdbcType=VARCHAR},
+      </if>
+      <if test="ncCbPlan != null">
+        #{ncCbPlan,jdbcType=CHAR},
+      </if>
+      <if test="ncOrderNumber != null">
+        #{ncOrderNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="def1 != null">
+        #{def1,jdbcType=VARCHAR},
+      </if>
+      <if test="def2 != null">
+        #{def2,jdbcType=VARCHAR},
+      </if>
+      <if test="def3 != null">
+        #{def3,jdbcType=VARCHAR},
+      </if>
+      <if test="def4 != null">
+        #{def4,jdbcType=VARCHAR},
+      </if>
+      <if test="def5 != null">
+        #{def5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.besbing.Entities.NcTaskAddunionExample" resultType="java.lang.Long">
+    select count(*) from NC_TASK_ADDUNION
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update NC_TASK_ADDUNION
+    <set>
+      <if test="record.pkTaskAddunion != null">
+        PK_TASK_ADDUNION = #{record.pkTaskAddunion,jdbcType=CHAR},
+      </if>
+      <if test="record.ncTaskAddcode != null">
+        NC_TASK_ADDCODE = #{record.ncTaskAddcode,jdbcType=CHAR},
+      </if>
+      <if test="record.ncTaskAddname != null">
+        NC_TASK_ADDNAME = #{record.ncTaskAddname,jdbcType=CHAR},
+      </if>
+      <if test="record.ncTestlistName != null">
+        NC_TESTLIST_NAME = #{record.ncTestlistName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ncAnalysisMethod != null">
+        NC_ANALYSIS_METHOD = #{record.ncAnalysisMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ncReportName != null">
+        NC_REPORT_NAME = #{record.ncReportName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ncTaskType != null">
+        NC_TASK_TYPE = #{record.ncTaskType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ncTaskDes != null">
+        NC_TASK_DES = #{record.ncTaskDes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ncTaskName != null">
+        NC_TASK_NAME = #{record.ncTaskName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ncIncludeProtype != null">
+        NC_INCLUDE_PROTYPE = #{record.ncIncludeProtype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ncCbPlan != null">
+        NC_CB_PLAN = #{record.ncCbPlan,jdbcType=CHAR},
+      </if>
+      <if test="record.ncOrderNumber != null">
+        NC_ORDER_NUMBER = #{record.ncOrderNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.def1 != null">
+        def1 = #{record.def1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.def2 != null">
+        def2 = #{record.def2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.def3 != null">
+        def3 = #{record.def3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.def4 != null">
+        def4 = #{record.def4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.def5 != null">
+        def5 = #{record.def5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update NC_TASK_ADDUNION
+    set PK_TASK_ADDUNION = #{record.pkTaskAddunion,jdbcType=CHAR},
+      NC_TASK_ADDCODE = #{record.ncTaskAddcode,jdbcType=CHAR},
+      NC_TASK_ADDNAME = #{record.ncTaskAddname,jdbcType=CHAR},
+      NC_TESTLIST_NAME = #{record.ncTestlistName,jdbcType=VARCHAR},
+      NC_ANALYSIS_METHOD = #{record.ncAnalysisMethod,jdbcType=VARCHAR},
+      NC_REPORT_NAME = #{record.ncReportName,jdbcType=VARCHAR},
+      NC_TASK_TYPE = #{record.ncTaskType,jdbcType=VARCHAR},
+      NC_TASK_DES = #{record.ncTaskDes,jdbcType=VARCHAR},
+      NC_TASK_NAME = #{record.ncTaskName,jdbcType=VARCHAR},
+      NC_INCLUDE_PROTYPE = #{record.ncIncludeProtype,jdbcType=VARCHAR},
+      NC_CB_PLAN = #{record.ncCbPlan,jdbcType=CHAR},
+      NC_ORDER_NUMBER = #{record.ncOrderNumber,jdbcType=DECIMAL},
+      def1 = #{record.def1,jdbcType=VARCHAR},
+      def2 = #{record.def2,jdbcType=VARCHAR},
+      def3 = #{record.def3,jdbcType=VARCHAR},
+      def4 = #{record.def4,jdbcType=VARCHAR},
+      def5 = #{record.def5,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.besbing.Entities.NcTaskAddunion">
+    update NC_TASK_ADDUNION
+    <set>
+      <if test="ncTaskAddcode != null">
+        NC_TASK_ADDCODE = #{ncTaskAddcode,jdbcType=CHAR},
+      </if>
+      <if test="ncTaskAddname != null">
+        NC_TASK_ADDNAME = #{ncTaskAddname,jdbcType=CHAR},
+      </if>
+      <if test="ncTestlistName != null">
+        NC_TESTLIST_NAME = #{ncTestlistName,jdbcType=VARCHAR},
+      </if>
+      <if test="ncAnalysisMethod != null">
+        NC_ANALYSIS_METHOD = #{ncAnalysisMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="ncReportName != null">
+        NC_REPORT_NAME = #{ncReportName,jdbcType=VARCHAR},
+      </if>
+      <if test="ncTaskType != null">
+        NC_TASK_TYPE = #{ncTaskType,jdbcType=VARCHAR},
+      </if>
+      <if test="ncTaskDes != null">
+        NC_TASK_DES = #{ncTaskDes,jdbcType=VARCHAR},
+      </if>
+      <if test="ncTaskName != null">
+        NC_TASK_NAME = #{ncTaskName,jdbcType=VARCHAR},
+      </if>
+      <if test="ncIncludeProtype != null">
+        NC_INCLUDE_PROTYPE = #{ncIncludeProtype,jdbcType=VARCHAR},
+      </if>
+      <if test="ncCbPlan != null">
+        NC_CB_PLAN = #{ncCbPlan,jdbcType=CHAR},
+      </if>
+      <if test="ncOrderNumber != null">
+        NC_ORDER_NUMBER = #{ncOrderNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="def1 != null">
+        def1 = #{def1,jdbcType=VARCHAR},
+      </if>
+      <if test="def2 != null">
+        def2 = #{def2,jdbcType=VARCHAR},
+      </if>
+      <if test="def3 != null">
+        def3 = #{def3,jdbcType=VARCHAR},
+      </if>
+      <if test="def4 != null">
+        def4 = #{def4,jdbcType=VARCHAR},
+      </if>
+      <if test="def5 != null">
+        def5 = #{def5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PK_TASK_ADDUNION = #{pkTaskAddunion,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.besbing.Entities.NcTaskAddunion">
+    update NC_TASK_ADDUNION
+    set NC_TASK_ADDCODE = #{ncTaskAddcode,jdbcType=CHAR},
+      NC_TASK_ADDNAME = #{ncTaskAddname,jdbcType=CHAR},
+      NC_TESTLIST_NAME = #{ncTestlistName,jdbcType=VARCHAR},
+      NC_ANALYSIS_METHOD = #{ncAnalysisMethod,jdbcType=VARCHAR},
+      NC_REPORT_NAME = #{ncReportName,jdbcType=VARCHAR},
+      NC_TASK_TYPE = #{ncTaskType,jdbcType=VARCHAR},
+      NC_TASK_DES = #{ncTaskDes,jdbcType=VARCHAR},
+      NC_TASK_NAME = #{ncTaskName,jdbcType=VARCHAR},
+      NC_INCLUDE_PROTYPE = #{ncIncludeProtype,jdbcType=VARCHAR},
+      NC_CB_PLAN = #{ncCbPlan,jdbcType=CHAR},
+      NC_ORDER_NUMBER = #{ncOrderNumber,jdbcType=DECIMAL},
+      def1 = #{def1,jdbcType=VARCHAR},
+      def2 = #{def2,jdbcType=VARCHAR},
+      def3 = #{def3,jdbcType=VARCHAR},
+      def4 = #{def4,jdbcType=VARCHAR},
+      def5 = #{def5,jdbcType=VARCHAR}
+    where PK_TASK_ADDUNION = #{pkTaskAddunion,jdbcType=CHAR}
+  </update>
+</mapper>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>委托单申请</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../static/framework/layuimini/layuimini/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../static/framework/layuimini/layuimini/css/public.css" media="all">
+    <script src="../../static/framework/layuimini/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+
+            <div class="layui-btn-group">
+                <button type="button" class="layui-btn layui-btn-sm" id="billAdd">新增</button>
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-disabled" id="billModify">修改</button>
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-disabled" id="billSave">保存</button>
+                <button type="button" class="layui-btn layui-btn-sm" id="billSearch">查询</button>
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-disabled" id="billCopy">复制</button>
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-disabled" id="billDel">删除</button>
+            </div>
+            <div class="layui-btn-group">
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-disabled" id="preview">委托单预览</button>
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-disabled" id="sampleMatrix">样品矩阵查询</button>
+            </div>
+            <div class="layui-btn-group">
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-disabled" id="billCommit">单据提交</button>
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-disabled" id="billUnionSearch">单据联查</button>
+            </div>
+            <hr class="layui-bg-gray">
+            <!--开始表单-->
+            <fieldset class="table-search-fieldset">
+                <legend>委托申请</legend>
+                <div style="margin: 10px 10px 10px 10px">
+                    <form class="layui-form layui-form-pane" action="">
+                        <div class="layui-form-item">
+
+                            <div class="layui-inline" style="display: none;">
+                                <label class="layui-form-label">委托主键</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="projectPrimaryKey" id="projectPrimaryKeyId" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">委托性质</label>
+                                <div class="layui-input-inline">
+                                    <select name="projectType" id="projectTypeId" lay-verify="required"  class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                        <option value="0">常规检测</option>
+                                        <option value="1">周期检验</option>
+                                        <option value="2">质量投诉</option>
+                                        <option value="3">客户要求</option>
+                                        <option value="4">安全认证</option>
+                                        <option value="5">产品开发</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">委托单号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="projectBillno" id="projectBillnoId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">委托名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="projectTitle" id="projectTitleId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">委托单位</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="projectCompy" id="projectCompyId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">付费单位</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="projectSourceCompy" id="projectSourceCompyId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">联&nbsp;系&nbsp;人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="projectContact" id="contactId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">制&nbsp;单&nbsp;人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="projectCreator" id="projectCreatorId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">电子邮件</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="projectEmail" id="projectEmailId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">联系电话</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="projectPhone" id="projectPhoneId" autocomplete="off" class="layui-input layui-disabled" disabled lay-verify="number">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">产品大类</label>
+                                <div class="layui-input-inline">
+                                    <select name="projectProdFirstType" id="projectProdFirstTypeId" lay-verify="required" class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">二级分类</label>
+                                <div class="layui-input-inline">
+                                    <select name="projectProdSecType"id="projectProdSecTypeId" lay-verify="required" class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">三级分类</label>
+                                <div class="layui-input-inline">
+                                    <select name="projectProdTirType" id="projectProdTirTypeId" lay-verify="required" class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">报告格式</label>
+                                <div class="layui-input-inline">
+                                    <select name="city" lay-verify="required" class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">报告语言</label>
+                                <div class="layui-input-inline">
+                                    <select name="reportLang" id="reportLangId" lay-verify="required" class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">进度要求</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="projectProcess" id="projectProcessId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">样品处理</label>
+                                <div class="layui-input-inline">
+                                    <select name="sampleProcessor" id="sampleProcessorId" lay-verify="required" class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">客户名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="projectCustomerName" id="projectCustomerNameId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">客户类型</label>
+                                <div class="layui-input-inline">
+                                    <select name="CustomerType" id="CustomerTypeId" lay-verify="required" class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">测试需求</label>
+                                <div class="layui-input-inline">
+                                    <select name="testRequire" id="testRequireId" lay-verify="required" class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">认证类型</label>
+                                <div class="layui-input-inline">
+                                    <select name="cnasType" id="cnasTypeId" lay-verify="required" class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">鉴定类别</label>
+                                <div class="layui-input-inline">
+                                    <select name="appraiseType" id="appraiseTypeId" lay-verify="required" class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">检测性质</label>
+                                <div class="layui-input-inline">
+                                    <select name="testType" id="testTypeId" lay-verify="required" class="layui-disabled" disabled>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">生产产线</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="productLine" id="productLineId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">生产批量</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="productNum" id="productNumId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">生产日期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="productDate" id="productDateId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">生产批号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="productBatch" id="productBatchId" autocomplete="off" class="layui-input layui-disabled" disabled>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+            <!--卡片开始-->
+            <!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">-->
+            <fieldset class="table-search-fieldset">
+                <legend>样品任务信息</legend>
+            </fieldset>
+
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">样品管理</li>
+                    <li>任务管理</li>
+                    <li>试验条件</li>
+                    <li>试验前参数</li>
+                    <li>试验后列表</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div id="toolbar">
+                            <div>
+                                <button type="button" class="layui-btn layui-btn-sm layui-btn-disabled" data-type="addRow" title="添加样品">
+                                    <i class="layui-icon layui-icon-add-1"></i> 添加样品
+                                </button>
+                                <button type="button" class="layui-btn layui-btn-sm layui-btn-disabled" data-type="delRow" title="删除样品">
+                                    <i class="layui-icon layui-icon-delete"></i> 删除样品
+                                </button>
+                            </div>
+                        </div>
+
+                        <table class="layui-hide" id="sampleAdd" lay-filter="sampleFilter" ></table>
+
+                    </div>
+                    <div class="layui-tab-item">内容2</div>
+                    <div class="layui-tab-item">内容3</div>
+                    <div class="layui-tab-item">内容4</div>
+                    <div class="layui-tab-item">内容5</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <script src="../../static/framework/layuimini/layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script>
+        layui.use(['form', 'table','layer','element','laydate'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table,
+                element = layui.element,
+                layer = layui.layer,
+                laydate = layui.laydate;
+
+            laydate.render({
+               elem:'#productDate'
+            });
+
+            var sampleBak = [];
+            sampleBak.push({
+                "billno": ""
+                ,"billname": ""
+                ,"projtype": ""
+                ,"creator": ""
+                ,"pkcommissionh": ""
+            });
+            table.render({
+                elem: '#sampleAdd',
+                //url: '/CustomerManagerTableInfo',
+                //method:'post',
+                data:[],
+                request: {
+                    pageName: 'page' //页码的参数名称，默认：page
+                    , limitName: 'limit' //每页数据量的参数名，默认：limit
+                },
+                response: {
+                    statusName: 'code' //数据状态的字段名称，默认：code
+                    , statusCode: 0 //成功的状态码，默认：0
+                    , countName: 'totals' //数据总数的字段名称，默认：count
+                    , dataName: 'list' //数据列表的字段名称，默认：data
+                },
+                cellMinWidth: 100,
+                cols: [
+                    [
+                        {type:'radio'},
+                        {field: 'billno', width: 165, title: '产品系列', sort: true,width:'15%'},
+                        {field: 'billname', width: 200, title: '企业标准', sort: true,width:'35%'},
+                        {field: 'projtype', width: 165, title: '任务性质', sort: true,width:'10%'},
+                        {field: 'creator', width: 200, title: '提交人', sort: true,width:'15%'},
+                        {field: 'pkcommissionh', width: 200, title: '主键', sort: true,width:'20%' ,hide:true},
+                    ]
+                ],
+                limit: 10,
+                limits: [10, 20, 30, 40, 50, 100],
+                page: true,
+                skin: 'line'
+
+            });
+
+
+
+
+        });
+    </script>
+
+
+</body>
+</html>

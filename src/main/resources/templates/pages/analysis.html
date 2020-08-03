@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../static/framework/layuimini/layuimini/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../static/framework/layuimini/layuimini/css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>分析模板维护</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">模板名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
+                <button class="layui-btn layui-btn-normal layui-btn-checked layui-btn-sm data-add-btn" lay-event="add"> 预览 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+    </div>
+</div>
+<script src="../../static/framework/layuimini/layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+        table.render({
+            elem: '#currentTableId',
+            //url: '../api/table.json',
+            url: '/getinstruments',
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [
+                    [
+                        {type: "checkbox", width: 50},
+                        {field: 'name', width: 135, title: '仪器名称', sort: true},
+                        {field: 'groupName', width: 80, title: '用户组', sort: true},
+                        {field: 'description', width: 135, title: '描述', sort: true},
+                        {field: 'onLine', width: 135, title: '是否有效', sort: true},
+                        {field: 'location', width: 135, title: '实验室', sort: true},
+                        {field: 'operator', width: 135, title: '操作者', sort: true},
+                        {field: 'vendor', width: 135, title: '制造厂商', sort: true},
+                        {field: 'serialNo', width: 135, title: '出厂编号'},
+                        {field: 'pmDate', width: 135, title: '维保时间', sort: true , hide:true},
+                        {field: 'pmIntv', width: 135, title: '维保间隔', sort: true , hide:true},
+                        {field: 'pmExpiration', width: 135, title: '维保有效期', sort: true , hide:true},
+                        {field: 'calibDate', width: 135, title: '校准日期', sort: true , hide:true},
+                        {field: 'calibIntv', width: 135, title: '校准周期', sort: true , hide:true},
+                        {field: 'calibExpiration', width: 135, title: '校准有效期', sort: true , hide:true},
+                        {field: 'changedOn', width: 135, title: '变更日期', sort: true , hide:true},
+                        {field: 'changedBy', width: 135, title: '变更人', sort: true , hide:true},
+                        {field: 'removed', width: 135, title: '是否作废', sort: true , hide:true},
+                        {field: 'extLink', width: 135, title: '外置链接', sort: true , hide:true},
+                        {field: 'linkLocation', width: 135, title: '链接定位', sort: true , hide:true},
+                        {field: 'parameter1Name', width: 135, title: '参数1名', sort: true , hide:true},
+                        {field: 'parameter1Value', width: 135, title: '参数1值', sort: true , hide:true},
+                        {field: 'parameter2Name', width: 135, title: '参数2名', sort: true , hide:true},
+                        {field: 'parameter2Value', width: 135, title: '参数2值', sort: true , hide:true},
+                        {field: 'labstation', width: 135, title: '实验室', sort: true , hide:true},
+                        {field: 'baud', width: 135, title: 'baud', sort: true , hide:true},
+                        {field: 'parity', width: 135, title: 'parity', sort: true , hide:true},
+                        {field: 'stopBits', width: 135, title: 'stopBits', sort: true , hide:true},
+                        {field: 'dataBits', width: 135, title: 'dataBits', sort: true , hide:true},
+                        {field: 'flowControl', width: 135, title: 'flowControl', sort: true , hide:true},
+                        {field: 'instrumentClass', width: 135, title: 'instrumentClass', sort: true , hide:true},
+                        {field: 'lowThreshold', width: 135, title: 'lowThreshold', sort: true , hide:true},
+                        {field: 'highThreshold', width: 135, title: 'highThreshold', sort: true , hide:true},
+                        {field: 'stabilityDelta', width: 135, title: 'stabilityDelta', sort: true , hide:true},
+                        {field: 'stabilityNumber', width: 135, title: 'stabilityNumber', sort: true , hide:true},
+                        {field: 'parentInstrument', width: 135, title: 'parentInstrument', sort: true , hide:true},
+                        {field: 'instTemplate', width: 135, title: 'instTemplate', sort: true , hide:true},
+                        {field: 'calibTemplate', width: 135, title: 'calibTemplate', sort: true , hide:true},
+                        {field: 'pmTemplate', width: 135, title: 'pmTemplate', sort: true , hide:true},
+                        {field: 'serviceTemplate', width: 135, title: 'serviceTemplate', sort: true , hide:true},
+                        {field: 'needsCalibration', width: 135, title: '是否需要校准', sort: true , hide:true},
+                        {field: 'needsPm', width: 135, title: '是否需要维护', sort: true , hide:true},
+                        {field: 'ipAddress', width: 135, title: 'IP地址', sort: true , hide:true},
+                        {field: 'portNumber', width: 135, title: '端口', sort: true , hide:true},
+                        {field: 'termPattern', width: 135, title: 'termPattern', sort: true , hide:true},
+                        {field: 'timeOut', width: 135, title: 'timeOut', sort: true , hide:true},
+                        {field: 'xmitPrefix', width: 135, title: 'xmitPrefix', sort: true , hide:true},
+                        {field: 'xmitSuffix', width: 135, title: 'xmitSuffix', sort: true , hide:true},
+                        {field: 'pollingTime', width: 135, title: 'pollingTime', sort: true , hide:true},
+                        {field: 'commPort', width: 135, title: 'commPort', sort: true , hide:true},
+                        {field: 'holdsSamples', width: 135, title: 'holdsSamples', sort: true , hide:true},
+                        {field: 'dataPath', width: 135, title: 'dataPath', sort: true , hide:true},
+                        {field: 'discardTime', width: 135, title: 'discardTime', sort: true , hide:true},
+                        {field: 'filterScript', width: 135, title: 'filterScript', sort: true , hide:true},
+                        {field: 'parsingScript', width: 135, title: 'parsingScript', sort: true , hide:true},
+                        {field: 'postArchiveAction', width: 135, title: 'postArchiveAction', sort: true , hide:true},
+                        {field: 'sizeLimit', width: 135, title: 'sizeLimit', sort: true , hide:true},
+                        {field: 'syncPattern', width: 135, title: 'syncPattern', sort: true , hide:true},
+                        {field: 'renameExt', width: 135, title: 'renameExt', sort: true , hide:true},
+                        {field: 'source', width: 135, title: 'source', sort: true , hide:true},
+                        {field: 'step', width: 135, title: 'step', sort: true , hide:true},
+                        {field: 'includeSubdirs', width: 135, title: 'includeSubdirs', sort: true , hide:true},
+                        {field: 'ftpUser', width: 135, title: 'ftpUser', sort: true , hide:true},
+                        {field: 'debug', width: 135, title: 'debug', sort: true , hide:true},
+                        {field: 'directory', width: 135, title: 'directory', sort: true , hide:true},
+                        {field: 'ftpMode', width: 135, title: 'ftpMode', sort: true , hide:true},
+                        {field: 'password', width: 135, title: 'password', sort: true , hide:true},
+                        {field: 'storeInDbFile', width: 135, title: 'storeInDbFile', sort: true , hide:true},
+                        {field: 'dbFilePrompt', width: 135, title: 'dbFilePrompt', sort: true , hide:true},
+                        {field: 'cEqName', width: 135, title: '设备名称', sort: true , hide:true},
+                        {field: 'cModel', width: 135, title: '设备型号', sort: true , hide:true},
+                        {field: 'cTechSpec', width: 135, title: '指标范围', sort: true , hide:true},
+                        {field: 'cAccuracy', width: 135, title: '设备精度', sort: true , hide:true},
+                        {field: 'cAllValue', width: 135, title: 'cAllValue', sort: true , hide:true},
+                        {field: 'cStartDate', width: 135, title: '启用时间', sort: true , hide:true},
+                        {field: 'cEqNo', width: 135, title: '资产编号', sort: true , hide:true},
+                        {field: 'cCalibNo', width: 135, title: '校准编号', sort: true , hide:true},
+                        {field: 'cForArrange', width: 135, title: '是否排程', sort: true , hide:true},
+                        {field: 'cEqType', width: 135, title: '管理分类', sort: true , hide:true},
+                        {field: 'cArrangeNo', width: 135, title: '排程编号', sort: true , hide:true},
+                        {field: 'cLab', width: 135, title: '实验室', sort: true , hide:true},
+                        {field: 'cArchiveNo', width: 135, title: '设备档案', sort: true , hide:true},
+                        {field: 'cCheckDate', width: 135, title: '核查时间', sort: true , hide:true},
+                        {field: 'cCheckIntv', width: 135, title: '核查间隔', sort: true , hide:true},
+                        {field: 'cCheckExpiraition', width: 135, title: '核查有效期', sort: true , hide:true},
+                        {field: 'cMaxCapacity', width: 135, title: '最大能力', sort: true , hide:true},
+                        {field: 'cZichanType', width: 135, title: '资产类型', sort: true , hide:true},
+                        {field: 'cCeshizu', width: 135, title: '测试组', sort: true , hide:true},
+                        {field: 'cSite', width: 135, title: '位置区域', sort: true , hide:true},
+                        {field: 'cProdArea', width: 135, title: '产地', sort: true , hide:true},
+                        {field: 'cErjiInstGroup', width: 135, title: '二级分类', sort: true , hide:true},
+                        {field: 'cStatus', width: 135, title: 'cStatus', sort: true , hide:true},
+                        {field: 'cArrangeInstGroup', width: 135, title: '排程仪器组', sort: true , hide:true},
+                        {field: 'cEqNameEn', width: 135, title: '设备名称英文', sort: true , hide:true},
+                        {field: 'cFiles1', width: 135, title: '附件1', sort: true , hide:true},
+                        {field: 'cFiles2', width: 135, title: '附件2', sort: true , hide:true},
+                        {field: 'cFiles3', width: 135, title: '附件3', sort: true , hide:true},
+                        {field: 'cFiles4', width: 135, title: '附件4', sort: true , hide:true},
+                        {field: 'cFiles5', width: 135, title: '附件5', sort: true , hide:true}
+                ]
+            ],
+            limits: [10, 15, 20, 25, 50, 100],
+            limit: 15,
+            page: true,
+            skin: 'line',
+            loading:true
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var result = JSON.stringify(data.field);
+            layer.alert(result, {
+                title: '最终的搜索信息'
+            });
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    searchParams: result
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        /**
+         * toolbar监听事件
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                var index = layer.open({
+                    title: '添加用户',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '../page/table/add.html',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            } else if (obj.event === 'delete') {  // 监听删除操作
+                var checkStatus = table.checkStatus('currentTableId')
+                    , data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+
+                var index = layer.open({
+                    title: '编辑用户',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '../page/table/edit.html',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            }
+        });
+
+    });
+</script>
+
+</body>
+</html>

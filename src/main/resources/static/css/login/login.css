@@ -1,0 +1,113 @@
+.login-body{
+    margin-left: 35%;
+    margin-top: 10%;
+    /*background-color: #cccccc;*/
+    background-color: #e7e7e7;
+    width: 400px;
+    height: 400px;
+    float: left;
+    z-index: 9999;
+    position: fixed;
+    opacity: 0.75;
+}
+.login-title{
+    width: 350px;
+    height: 60px;
+    padding-left: 65px;
+    horiz-align: center;
+    padding-top: 25px;
+    font-size: 30px;
+    font-family:"Times New Roman";
+    color: #005544;
+}
+.login-item{
+    width: 400px;
+    height: 70px;
+}
+.usernameLabel{
+    width: 60px;
+    height: 30px;
+    font-size: 16px;
+    float: left;
+    margin-left: 55px;
+    margin-top: 40px;
+    color: #005544;
+}
+.usernameDiv{
+    width: 300px;
+    height: 40px;
+    padding-left: 130px;
+    padding-top: 30px;
+
+}
+i{
+    position: absolute;
+}
+.passwordDiv{
+    width: 300px;
+    height: 40px;
+    padding-left: 130px;
+    padding-top: 28px;
+}
+.cardDiv{
+    width: 120px;
+    height: 40px;
+    padding-top: 28px;
+    padding-left: 14px;
+    float: left;
+}
+.codeDiv{
+    width: 100px;
+    height: 40px;
+    padding-top: 28px;
+    padding-right: 20px;
+    float: left;
+}
+.submitLabel{
+    width: 160px;
+    height: 30px;
+    font-size: 13px;
+    float: left;
+    margin-left: 55px;
+    margin-top: 40px;
+    cursor: pointer;
+}
+.submitDiv{
+    width: 150px;
+    height: 40px;
+    padding-left: 10px;
+    padding-top: 28px;
+    float: left;
+}
+.submit{
+    width: 100px;
+    height: 40px;
+    border-radius: 0.5em;
+}
+#footer {
+    height: 20px;
+    line-height: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    /*background: #333;*/
+    color: #fff;
+    font-family: Arial;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+a {
+    /*background: #333;*/
+    color: #fff;
+    font-family: Arial;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+#loginRegister {
+    color: #005544;
+}
+#forgetpwd {
+    color: #9F9F9F;
+}
