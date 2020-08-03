@@ -192,10 +192,23 @@
         form.on('submit(data-search-btn)', function (data) {
             var result = JSON.stringify(data.field);
             //layer.alert(data.field);
-
-            console.log($("#createDate").val());
+            /*var resultvalue = [];
+            resultvalue.push("","");*/
+            /*console.log($("#createDate").val());
             console.log($("#testName").val());
-            console.log(data);
+            console.log($("#testGroup").val());
+            console.log($("#maker").val());
+            console.log($("#taskid").val());*/
+            var defQuery = ' and 1 = 1 ';
+            var taskid = $("#taskid").val().replace(/^\s+|\s+$/gm, '');
+            if (taskid != '' || taskid != undefined || taskid != null ){
+                defQuery = defQuery +" and task_id = '" + taskid + "' ";
+            }
+            var testName = $("#testName").val().replace(/^\s+|\s+$/gm, '');
+            if (testName != '' || testName != undefined || testName != null ){
+                defQuery = defQuery + " and task_reported_name = '" + testName + "' ";
+            }
+
             //执行搜索重载
             table.reload('currentTableId', {
                 page: {

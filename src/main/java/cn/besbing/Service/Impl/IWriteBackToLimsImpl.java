@@ -41,7 +41,7 @@ public class IWriteBackToLimsImpl implements IWriteBackToLims {
     @Autowired(required = false)
     ITaskBServiceImpl iTaskBService;
 
-    GetNcPrimaryKey ncPrimaryKey = new GetNcPrimaryKey();
+    GetNcPrimaryKey ncPrimaryKey = null;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
@@ -50,6 +50,8 @@ public class IWriteBackToLimsImpl implements IWriteBackToLims {
 
 
     public synchronized String WriteBackToLims(String projectBillNumber){
+
+        ncPrimaryKey = new GetNcPrimaryKey();
         String returnMsg = "";
         try{
             /**
@@ -101,6 +103,7 @@ public class IWriteBackToLimsImpl implements IWriteBackToLims {
     }
 
     private List<CProjTask> cProjTaskETL(String projectBillNumber, CProjTask cProjTaskTemplate) throws ParseException {
+        ncPrimaryKey = new GetNcPrimaryKey();
         List<String> qcTaskBPrimaryKeys = customerSqlService.selectAsList("select pk_task_b from qc_task_b where dr = 0 and taskcode like '"+ projectBillNumber +"%' ");
         List<QcTaskB> qcTaskBList = iTaskBService.getTaskB(qcTaskBPrimaryKeys);
         List<CProjTask> cProjTaskList = new ArrayList<CProjTask>();
@@ -137,6 +140,7 @@ public class IWriteBackToLimsImpl implements IWriteBackToLims {
     }
 
     private List<CProjLoginSample> cProjLoginSampleETL(String projectBillNumber, CProjLoginSample cProjLoginSampleTemplate) {
+        ncPrimaryKey = new GetNcPrimaryKey();
         List<CProjLoginSample> loginSampleList = new ArrayList<CProjLoginSample>();
         List<QcCommissionB> list = new ArrayList<QcCommissionB>();
         String commissionHPrimaryKey = customerSqlService.selectOne("select h.pk_commission_h from qc_commission_h h where h.billno = '' and dr = 0");
@@ -165,6 +169,7 @@ public class IWriteBackToLimsImpl implements IWriteBackToLims {
     }
 
     private Project projectETL(String projectBillNumber) {
+        ncPrimaryKey = new GetNcPrimaryKey();
         Project project = null;
         QcCommissionH qcCommissionH = null;
         try{
