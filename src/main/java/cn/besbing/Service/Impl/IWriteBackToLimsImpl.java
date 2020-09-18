@@ -4,6 +4,8 @@ import cn.besbing.CommonUtils.Utils.GetNcPrimaryKey;
 import cn.besbing.Entities.*;
 import cn.besbing.Service.IWriteBackToLims;
 import org.apache.tomcat.util.http.fileupload.util.LimitedInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +50,8 @@ public class IWriteBackToLimsImpl implements IWriteBackToLims {
     Project templateProject = null;
     CProjLoginSample templateCProjLoginSample = null;
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     public synchronized String WriteBackToLims(String projectBillNumber){
 
@@ -66,7 +70,7 @@ public class IWriteBackToLimsImpl implements IWriteBackToLims {
             //任务表回写准备        list    准备
             CProjTask cProjTask = iCprojTaskService.getLimsExampleTask();
             List<CProjTask> cProjTaskList = cProjTaskETL(projectBillNumber,cProjTask);
-            //判断tasksample有多少个
+            //判断tasksample有多少个，如果有同样的任务，则多增一条sample记录，否则为一条，为了区分result
             /*List
             for (){
 
@@ -235,5 +239,26 @@ public class IWriteBackToLimsImpl implements IWriteBackToLims {
         return project;
     }
 
+    private int deleteExistProjectAllDataExceptProject(String projectBillNumber){
+        int i = -1 ;
+        try{
+            i = customerSqlService.update("update project set c_nc_to_lims = 'F' where name = '" + projectBillNumber + "' ");
+        }catch (Exception e){
+            logger.error("删除lims中已存在委托单其它信息出错，具体错误：{}",e.getStackTrace());
+            return -2;
+        }
+        return i;
+    }
+
+    private int deleteExistProjectInLims(String projectBillNumber){
+        int i = -1 ;
+        try {
+            iProjectService.deleteProjectByPrimary(projectBillNumber);
+        }catch (Exception e){
+            logger.error("删除lims中已存在委托单信息出错，具体错误：{}",e.getStackTrace());
+            return -2;
+        }
+        return i;
+    }
 
 }

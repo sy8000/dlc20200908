@@ -204,7 +204,7 @@ public class AnalysisThread {
                 if (ncProdList == null){
                     //如果不存在，则开始更新
                     logger.info("product:{},version:{},开始更新...",product.getName(),product.getVersion());
-                    if ("QFVF4241-2020".equals(product.getName()) && "1".equals(product.getVersion().toString())){
+                    if ("QFVF4047.LG-2020".equals(product.getName()) && "1".equals(product.getVersion().toString())){
                         logger.debug("====={}====={}=======",product.getName(),product.getVersion().toString());
                     }
                     Long version = Long.valueOf(product.getVersion().toString());

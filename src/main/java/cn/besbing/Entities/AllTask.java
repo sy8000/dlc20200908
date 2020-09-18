@@ -69,6 +69,97 @@ public class AllTask {
 
     private String ts;
 
+    private String reportUploadDate;
+    private String rptAssginTo;
+    private String reportUploadUser;
+    private String reportSignDate;
+    private String reportSignUser;
+    private String cAnalystSubmitDate;
+    private String cAnalystSubmitBy;
+    private String cCoaFormat;
+    private String vdef1;
+    private String cAddress;
+
+    public String getcAddress() {
+        return cAddress;
+    }
+
+    public void setcAddress(String cAddress) {
+        this.cAddress = cAddress;
+    }
+
+    public String getReportUploadDate() {
+        return reportUploadDate;
+    }
+
+    public void setReportUploadDate(String reportUploadDate) {
+        this.reportUploadDate = reportUploadDate;
+    }
+
+    public String getRptAssginTo() {
+        return rptAssginTo;
+    }
+
+    public void setRptAssginTo(String rptAssginTo) {
+        this.rptAssginTo = rptAssginTo;
+    }
+
+    public String getReportUploadUser() {
+        return reportUploadUser;
+    }
+
+    public void setReportUploadUser(String reportUploadUser) {
+        this.reportUploadUser = reportUploadUser;
+    }
+
+    public String getReportSignDate() {
+        return reportSignDate;
+    }
+
+    public void setReportSignDate(String reportSignDate) {
+        this.reportSignDate = reportSignDate;
+    }
+
+    public String getReportSignUser() {
+        return reportSignUser;
+    }
+
+    public void setReportSignUser(String reportSignUser) {
+        this.reportSignUser = reportSignUser;
+    }
+
+    public String getcAnalystSubmitDate() {
+        return cAnalystSubmitDate;
+    }
+
+    public void setcAnalystSubmitDate(String cAnalystSubmitDate) {
+        this.cAnalystSubmitDate = cAnalystSubmitDate;
+    }
+
+    public String getcAnalystSubmitBy() {
+        return cAnalystSubmitBy;
+    }
+
+    public void setcAnalystSubmitBy(String cAnalystSubmitBy) {
+        this.cAnalystSubmitBy = cAnalystSubmitBy;
+    }
+
+    public String getcCoaFormat() {
+        return cCoaFormat;
+    }
+
+    public void setcCoaFormat(String cCoaFormat) {
+        this.cCoaFormat = cCoaFormat;
+    }
+
+    public String getVdef1() {
+        return vdef1;
+    }
+
+    public void setVdef1(String vdef1) {
+        this.vdef1 = vdef1;
+    }
+
     public String getCustomer() {
         return customer;
     }

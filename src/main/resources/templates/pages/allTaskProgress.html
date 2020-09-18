@@ -21,19 +21,19 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">任务单号</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="taskid" autocomplete="off" class="layui-input">
+                                <input type="text" name="taskid" id="taskid"  autocomplete="off" class="layui-input" >
                             </div>
                         </div>
 
                         <div class="layui-inline">
                             <label class="layui-form-label">委托人</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="maker" autocomplete="off" class="layui-input">
+                                <input type="text" name="maker" id="maker" autocomplete="off" class="layui-input">
                             </div>
                         </div>
 
                         <div class="layui-inline">
-                            <label class="layui-form-label">单据日期</label>
+                            <label class="layui-form-label">制单日期</label>
                             <div class="layui-input-inline">
                                 <input type="text" class="layui-input" id="createDate" placeholder=" - ">
                             </div>
@@ -42,18 +42,30 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">测试名称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="testName" autocomplete="off" class="layui-input">
+                                <input type="text" name="testName" id="testName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
 
                         <div class="layui-inline">
                             <label class="layui-form-label">测试组</label>
                             <div class="layui-input-inline">
-                                <select name="testGroup" lay-verify="" lay-search>
-                                    <option value="000"></option>
+                                <select name="testGroup" lay-verify="" lay-search id="testGroup">
+                                    <option value="000">-</option>
                                     <option value="001">测试一组</option>
                                     <option value="002">测试二组</option>
                                     <option value="003">测试三组</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">任务状态</label>
+                            <div class="layui-input-inline">
+                                <select name="taskStatus" lay-verify="" lay-search id="taskStatusId">
+                                    <option value="000">-</option>
+                                    <option value="001">正常态</option>
+                                    <option value="002">任务中止</option>
+                                    <option value="003">任务取消</option>
                                 </select>
                             </div>
                         </div>
@@ -128,55 +140,55 @@
                 , dataName: 'list' //数据列表的字段名称，默认：data
             },
             defaultToolbar: ['filter', 'exports', 'print', {
-                title: '提示',
+                title: '报告导出',
                 layEvent: 'LAYTABLE_TIPS',
                 icon: 'layui-icon-tips'
             }],
             cols: [
                 [
-                    /*
-                    {type: "checkbox", width: 50},
-                    {field: 'project', width: 165, title: '任务单号', sort: true},
-                    {field: 'taskId', width: 200, title: '所属委托单', sort: true},
-                    {field: 'taskReportedName', width: 165, title: '任务名称', sort: true},
-                    {field: 'analysis', width: 200, title: '分析模板', sort: true},
-                    {field: 'testNumber', width: 80, title: '测试号', sort: true},
-                    {field: 'planTestTime', width: 80, title: '预计测试时间', sort: true},
-                    {field: 'lab', width: 150, title: '测试小组', sort: true}
-                     */
-                    {field: 'taskId', width: 165, title: '任务单号', sort: true},
-                    {field: 'taskReportedName', width: 165, title: '任务报告名称', sort: true},
-                    {field: 'productSeries', width: 165, title: '产品系列', sort: true},
-                    {field: 'testGroup', width: 140, title: '测试组', sort: true},
-                    {field: 'assginTo', width: 80, title: '测试员', sort: true},
-                    {field: 'actureStartDate', width: 120, title: '实际开始日期', sort: true},
-                    {field: 'actureEndDate', width: 120, title: '实际结束日期', sort: true},
-                    {field: 'reviewedOn', width: 120, title: '复核时间', sort: true},
-                    {field: 'rptAuthorizedOn', width: 120, title: '报告签发时间', sort: true},
-                    {field: 'dateReceived', width: 120, title: '样品接收日期', sort: true },
+                    {type: "checkbox", width: 50, fixed: 'left' },
                     {field: 'template', width: 120, title: '委托类型', sort: true},
-                    {field: 'tSourceCustomer', width: 165, title: '付费单位', sort: true},
-                    {field: 'customerContact', width: 80, title: '联系人', sort: true},
+                    {field: 'title', width: 165, title: '委托单名称', sort: true, hide:true},
                     {field: 'customer', width: 165, title: '客户名称', sort: true, hide:true},
+                    {field: 'customerContact', width: 80, title: '联系人', sort: true},
+                    {field: 'tSourceCustomer', width: 165, title: '付费单位', sort: true, hide:true},
                     {field: 'name', width: 165, title: '委托单号', sort: true, hide:true},
-                    {field: 'priority', width: 165, title: '优先级', sort: true, hide:true},
+                    {field: 'taskId', width: 165, title: '任务单号', sort: true},
+                    {field: 'cCoaFormat', width: 100, title: '报告类型', sort: true, hide:true},
+                    {field: 'taskReportedName', width: 165, title: '项目名称', sort: true},
                     {field: 'commonName', width: 165, title: '常用名称', sort: true, hide:true},
-                    {field: 'reportName', width: 100, title: '试验类别', sort: true, hide:true},
+                    {field: 'reportName', width: 100, title: '产品大类', sort: true, hide:true},
+                    {field: 'productSeries', width: 165, title: '产品系列', sort: true},
                     {field: 'assignedSampleQuantity', width: 165, title: '样品数量', sort: true, hide:true},
-                    {field: 'condition', width: 165, title: '测试条件', sort: true, hide:true},
+                    {field: 'condition', width: 165, title: '测试条件', sort: true},
+                    {field: 'testGroup', width: 140, title: '测试组', sort: true},
                     {field: 'instArrangeNo', width: 165, title: '排程仪器', sort: true, hide:true},
-                    {field: 'conclusion', width: 165, title: '测试结果', sort: true, hide:true},
+                    {field: 'priority', width: 165, title: '优先级', sort: true, hide:true},
+                    {field: 'assginTo', width: 80, title: '测试员', sort: true},
                     {field: 'dateCreated', width: 120, title: '委托日期', sort: true, hide:true},
-                    //,templet: function (d) { return util.toDateString(d.dateReceived * 1000, "yyyy-mm-dd") }
-                    {field: 'planStartDate', width: 120, title: '计划开始日期', sort: true, hide:true},
-                    {field: 'planEndDate', width: 120, title: '计划结束日期', sort: true, hide:true},
-                    {field: 'predictEndDate', width: 120, title: '预计结束日期', sort: true, hide:true},
-                    {field: 'rptAuthorizedBy', width: 80, title: '报告签发人', sort: true, hide:true},
+                    {field: 'dateReceived', width: 120, title: '样品接收', sort: true },
+                    {field: 'planStartDate', width: 120, title: '计划开始', sort: true},
+                    {field: 'planEndDate', width: 120, title: '计划结束', sort: true},
+                    {field: 'actureStartDate', width: 120, title: '实际开始', sort: true},
+                    {field: 'predictEndDate', width: 120, title: '预计结束', sort: true},
+                    {field: 'actureEndDate', width: 120, title: '实际结束', sort: true},
+                    {field: 'cAnalystSubmitBy', width: 80, title: '提交测试员', sort: true, hide:true},
+                    {field: 'cAnalystSubmitDate', width: 120, title: '提交复核', sort: true},
+                    {field: 'rptAssginTo', width: 80, title: '复核工程师', sort: true},
+                    {field: 'reportUploadUser', width: 80, title: '实际复核人', sort: true, hide:true},
+                    {field: 'reportUploadDate', width: 120, title: '实际复核', sort: true},
+                    {field: 'conclusion', width: 165, title: '测试结果', sort: true},
+                    {field: 'rptAuthorizedBy', width: 80, title: '报告格式', sort: true, hide:true},
+                    {field: 'reportSignUser', width: 80, title: '报告签发人', sort: true},
+                    {field: 'reportSignDate', width: 120, title: '报告签发', sort: true},
+                    {field: 'vdef1', width: 120, title: '客户确认', sort: true},
                     {field: 'quotes', width: 165, title: '报价单金额', sort: true, hide:true},
                     {field: 'actualFee', width: 165, title: '实际费用', sort: true, hide:true},
-                    {field: 'title', width: 165, title: '委托单名称', sort: true, hide:true},
+                    {field: 'rptAuthorizedOn', width: 120, title: '报告签发时间', sort: true, hide:true},
+                    {field: 'reviewedOn', width: 120, title: '复核时间', sort: true, hide:true},
                     {field: 'seqNum', width: 165, title: '主键', sort: true, hide:true},
-                    {field: 'ts', width: 165, title: '时间戳', sort: true, hide:true}
+                    {field: 'ts', width: 165, title: '时间戳', sort: true, hide:true},
+                    {field: 'cAddress', width: 165, title: '是否终止', sort: true}
                 ]
             ],
             limit: 10,
@@ -190,25 +202,23 @@
 
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
-            var result = JSON.stringify(data.field);
+            //var result = JSON.stringify(data.field);
             //layer.alert(data.field);
             /*var resultvalue = [];
-            resultvalue.push("","");*/
-            /*console.log($("#createDate").val());
-            console.log($("#testName").val());
-            console.log($("#testGroup").val());
-            console.log($("#maker").val());
-            console.log($("#taskid").val());*/
-            var defQuery = ' and 1 = 1 ';
-            var taskid = $("#taskid").val().replace(/^\s+|\s+$/gm, '');
-            if (taskid != '' || taskid != undefined || taskid != null ){
-                defQuery = defQuery +" and task_id = '" + taskid + "' ";
-            }
-            var testName = $("#testName").val().replace(/^\s+|\s+$/gm, '');
-            if (testName != '' || testName != undefined || testName != null ){
-                defQuery = defQuery + " and task_reported_name = '" + testName + "' ";
-            }
-
+            resultvalue.push($("#createDate").val());
+            resultvalue.push($("#testName").val());
+            resultvalue.push($("#testGroup").val());
+            resultvalue.push($("#maker").val());
+            resultvalue.push($("#taskid").val());
+            var result = JSON.stringify(resultvalue);*/
+            var result = "{'createDate':'"+ $("#createDate").val() +"',";
+            result += "'testName':'"+ $("#testName").val() +"',";
+            result += "'testGroup':'"+ $("#testGroup").val() +"',";
+            result += "'maker':'"+ $("#maker").val() +"',";
+            result += "'taskid':'"+ $("#taskid").val() +"',";
+            result += "'taskStatus':'" + $("#taskStatusId").val() + "'} ";
+             //var result = JSON.stringify(resultvalue);
+            console.log(result);
             //执行搜索重载
             table.reload('currentTableId', {
                 page: {
@@ -228,6 +238,28 @@
         table.on('toolbar(currentTableFilter)', function (obj) {
             var checkStatus = table.checkStatus('currentTableId')
                 , data = checkStatus.data;
+
+            /**
+             * 报告导出
+             */
+            if(obj.event === 'LAYTABLE_TIPS'){
+                //layer.alert('报告导出');
+                console.log(data);
+                for (var i = 0; i < checkStatus.data.length; i++){
+                    //console.log("第" + i + "次" );
+                    //console.log(data[i].taskId);
+                    //单项直接导出，成套需弹窗
+                    /*
+                    if (data[i].cCoaFormat == "单项"){
+                        console.log("单项");
+                        window.open("http://10.0.11.82:8080/webroot/decision/view/report?viewlet=HFengineer_old.cpt&taskid=" + data[i].taskId + ".xls&format=excel&extype=page&isExcel2003=true");
+                    }else {
+                        console.log("成套");
+                    }
+                     */
+                    window.open("http://10.0.11.82:8080/webroot/decision/view/report?viewlet=HFengineer_old.cpt&taskid=" + data[i].taskId + "&__filename__=" + data[i].taskId + "&format=excel&extype=page&isExcel2003=true");
+                }
+            }
 
             if (obj.event === 'sample') {  // 监听样品管理员跳转
                 layer.confirm('确定将任务转换至样品接收状态吗？', function (index) {

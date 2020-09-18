@@ -39,6 +39,9 @@ public class CustomerSqlController {
     @Autowired
     ResultServiceImpl resultService;
 
+    @Autowired
+    ForgetPWDImpl forgetPWD;
+
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -350,6 +353,8 @@ public class CustomerSqlController {
     public PageDataResult getAllTaskProgess(@RequestParam("page") Integer page, @RequestParam("limit") Integer limit, @RequestParam(value = "keyword", required = false) String keyword){
         PageDataResult pdr = new PageDataResult();
         JSONObject jsonObject = new JSONObject();
+        String transKey = "";
+        SearchDTO searchDTO = null;
         try {
             if (null == page) {
                 page = 1;
@@ -360,15 +365,91 @@ public class CustomerSqlController {
             //System.out.println(keyword);
             if (keyword != null && keyword != ""){
                 jsonObject = JSONObject.parseObject(keyword);
-                keyword = jsonObject.get("taskid").toString();
+                String taskid = jsonObject.get("taskid").toString();
+                if (taskid != null && !"".equals(taskid.trim())){
+                    transKey = " and 1 = 1 and task_id like '%" + taskid + "%' ";
+                }
+                String createDate = jsonObject.get("createDate").toString();
+                if (createDate != null && !"".equals(createDate.trim())){
+                    String dateArr[] = createDate.split(" - ");
+                    transKey = " and 1 = 1 and (date_created between to_date('" + dateArr[0] + "','yyyy-mm-dd') and to_date('" + dateArr[1] + "','yyyy-mm-dd')) ";
+                }
+                String testName = jsonObject.get("testName").toString();
+                if (testName != null && !"".equals(testName.trim())){
+                    transKey += " and  1 = 1 and task_reported_name like '%" + testName + "%' ";
+                }
+
+                String testGroup = jsonObject.get("testGroup").toString();
+                if (testGroup != null && !"000".equals(testGroup.trim())){
+                    if ("001".equals(testGroup)){transKey += " and  1 = 1 and test_Group like '%测试一组%' ";}
+                    if ("002".equals(testGroup)){transKey += " and  1 = 1 and test_Group like '%测试二组%' ";}
+                    if ("003".equals(testGroup)){transKey += " and  1 = 1 and test_Group like '%测试三组%' ";}
+                }
+
+                String taskStatus = jsonObject.get("taskStatus").toString();
+                if (taskStatus != null && !"000".equals(taskStatus)){
+                    if ("001".equals(taskStatus)){transKey += " and  1 = 1  ";}
+                    if ("002".equals(taskStatus)){transKey += " and  1 = 1 and c_address like '任务中止%' ";}
+                    if ("003".equals(taskStatus)){transKey += " and  1 = 1 and c_address like '任务取消%' ";}
+                }
+
+
+                String maker = jsonObject.get("maker").toString();
+                if (maker != null && !"".equals(maker.trim())){
+                    transKey += " and  1 = 1 and customer_contact like '%" + maker + "%' ";
+                }
+                //System.out.println();
+                searchDTO = new SearchDTO(page,limit,transKey);
+            }else{
+                searchDTO = new SearchDTO(page,limit,keyword);
             }
-            SearchDTO searchDTO = new SearchDTO(page,limit,keyword);
             pdr = allTaskService.getTask(searchDTO);
         }catch (Exception e){
             e.printStackTrace();
         }
         return pdr;
     }
+
+
+    @RequestMapping(value = "/resetPwd",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject resetPwd(@RequestBody String usercode){
+        System.out.println(usercode);
+        JSONObject returnJson = new JSONObject();
+        returnJson.put("status",forgetPWD.sendMailWhenForgetPassword(usercode.toString()));
+        return returnJson;
+
+    }
+
+    @RequestMapping(value = "/validurl",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject validurl(@RequestBody String timestampStr){
+        JSONObject returnJson = new JSONObject();
+        returnJson = forgetPWD.checkTimeValid(timestampStr);
+        return returnJson;
+
+    }
+
+    @RequestMapping(value = "/confirmPassword",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject confirmPassword(@RequestBody String newPassword){
+        JSONObject returnJson = new JSONObject();
+        returnJson = forgetPWD.confirmNewPassword(newPassword);
+        return returnJson;
+
+    }
+
+    /**
+     * 临时用，放报告的
+     * @return
+     */
+
+    @RequestMapping(value = "/report",method = RequestMethod.GET)
+    public String Mobile(){
+        return "pages/ShowTaskButton.html";
+    }
+
+
 
 
 }

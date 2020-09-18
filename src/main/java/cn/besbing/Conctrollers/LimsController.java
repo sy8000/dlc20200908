@@ -114,4 +114,40 @@ public class LimsController {
         return "pages/ChargeManager.html";
     }
 
+    /**
+     * 委托单预览界面跳转
+     * @return
+     */
+    @RequestMapping(value = "/ProjectPreview",method = RequestMethod.GET)
+    public String ProjectPreview(){
+        return "pages/ProjectPreview.html";
+    }
+
+    /**
+     * 任务列表for lims界面跳转
+     * @return
+     */
+    @RequestMapping(value = "/LimsTaskProcess",method = RequestMethod.GET)
+    public String LimsTaskProcess(){
+        return "pages/AllTaskProgressForLims.html";
+    }
+
+    /**
+     * 报告重签
+     * @return
+     */
+    @RequestMapping(value = "/reportReSign",method = RequestMethod.GET)
+    public String ReportReSign(){
+        return "pages/ReportReSign.html";
+    }
+
+
+
+    @RequestMapping(value = "/mobile",method = RequestMethod.GET)
+    public String Mobile(){
+        return "pages/mobile/ListIndex";
+    }
+
+
+
 }

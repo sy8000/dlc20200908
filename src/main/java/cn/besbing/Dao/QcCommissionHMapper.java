@@ -22,6 +22,9 @@ public interface QcCommissionHMapper {
 
     QcCommissionH selectByPrimaryKey(String pkCommissionH);
 
+
+    QcCommissionH selectByBillno(@Param("billno") String billno);
+
     int updateByExampleSelective(@Param("record") QcCommissionH record, @Param("example") QcCommissionHExample example);
 
     int updateByExample(@Param("record") QcCommissionH record, @Param("example") QcCommissionHExample example);

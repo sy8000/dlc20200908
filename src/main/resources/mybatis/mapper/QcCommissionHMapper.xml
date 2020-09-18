@@ -192,6 +192,12 @@
     from QC_COMMISSION_H
     where PK_COMMISSION_H = #{pkCommissionH,jdbcType=CHAR}
   </select>
+  <select id="selectByBillno" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from QC_COMMISSION_H
+    where DR = 0 AND BILLNO = #{billno,jdbcType=VARCHAR}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from QC_COMMISSION_H
     where PK_COMMISSION_H = #{pkCommissionH,jdbcType=CHAR}

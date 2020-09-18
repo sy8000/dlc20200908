@@ -5,9 +5,37 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 
 @Service
 public class DownloadServiceImpl {
+
+
+    public void downLoad(HttpServletResponse response,String filename) throws UnsupportedEncodingException {
+        String filePath = "D:/resignreport/finalresign" ;
+        //String filePath = "/finalReport" ;
+        File file = new File(filePath + "/" + filename);
+        //File file = new File(filename);
+        if(file.exists()){
+            response.setContentType("application/octet-stream");
+            response.setHeader("content-type", "application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(filename,"utf8"));
+            byte[] buffer = new byte[1024];
+            //输出流
+            OutputStream os = null;
+            try(FileInputStream fis= new FileInputStream(file);
+                BufferedInputStream bis = new BufferedInputStream(fis);) {
+                os = response.getOutputStream();
+                int i = bis.read(buffer);
+                while(i != -1){
+                    os.write(buffer);
+                    i = bis.read(buffer);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     public String downloadFile(HttpServletResponse response, String fillName) throws Exception {

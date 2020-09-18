@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 @Controller
@@ -68,8 +69,10 @@ public class LoginController {
         System.out.println(loginMap.get("password").toString());
         //UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken("abc","def");
         //Map<String,String> log = new HashedMap();
+        SmUser smUser  = null;
         try{
-            SmUser smUser  = smuserService.selectUserPasswordByUserCode(loginMap.get("username").toString());
+            smUser  = smuserService.selectUserPasswordByUserCode(loginMap.get("username").toString());
+
             if (smUser != null){
                 pwd = NC6PasswordUtil.getEncodedPassword(smUser.getCuserid().toString(), loginMap.get("password").toString());
                 System.out.println("pwd===================" + pwd);

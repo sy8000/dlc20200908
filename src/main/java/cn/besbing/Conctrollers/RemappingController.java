@@ -22,5 +22,15 @@ public class RemappingController {
         return "/pages/allTaskProgress";
     }
 
+    @RequestMapping(value = "/forgetPass",method = RequestMethod.GET)
+    public String forgetPass(){
+        return "/pages/ForgetPassword";
+    }
+
+    @RequestMapping(value = "/resetPass",method = RequestMethod.GET)
+    public String validurl(){
+        return "/pages/ResetPassword";
+    }
+
 
 }

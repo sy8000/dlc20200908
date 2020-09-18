@@ -43,4 +43,12 @@ public class IQcCommissionHServiceImpl implements IQcCommissionHService {
         return qcCommissionHMapper.selectByPrimaryKey(pk_commission_h);
     }
 
+    public QcCommissionH selectQMHByBillno(String billNo){
+        return qcCommissionHMapper.selectByBillno(billNo);
+    }
+
+    public int updateQcCommH(QcCommissionH qcCommissionH){
+        return qcCommissionHMapper.updateByPrimaryKey(qcCommissionH);
+    }
+
 }

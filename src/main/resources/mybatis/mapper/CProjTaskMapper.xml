@@ -271,6 +271,12 @@
     </if>
     order by cpt.test_number desc
   </select>
+  <select id="selectByTaskIdForReport" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from C_PROJ_TASK
+    where TASK_ID like '%'||#{taskId,jdbcType=VARCHAR}||'%'
+  </select>
   <select id="selectForTechEngineer" resultMap="TechEngineerResultMap" parameterType="cn.besbing.CommonUtils.MaintainModel.SearchDTO">
     select cpt.task_id TASK_ID,cpt.task_reported_name TASK_REPORTED_NAME,(select full_name from lims_users where user_name = cpt.assgin_to) ASSGIN_TO,
     to_char(cpt.changed_on,'yyyy-mm-dd') CHANGED_ON,(select full_name from lims_users where user_name = cpt.rpt_assgin_to) RPT_ASSGIN_TO,

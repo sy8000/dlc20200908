@@ -168,7 +168,7 @@
     select
     <include refid="Base_Column_List" />
     from SM_USER
-    where USER_CODE = #{userCode,jdbcType=CHAR}
+    where USER_CODE = #{userCode,jdbcType=VARCHAR}
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

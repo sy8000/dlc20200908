@@ -17,6 +17,8 @@ public interface CProjTaskMapper {
 
     CProjTask selectByTaskId(@RequestParam(value = "taskid", required = false) String taskid);
 
+    List<CProjTask> selectByTaskIdForReport(@RequestParam(value = "taskid", required = false) String taskid);
+
     int updateByTaskId(CProjTask record);
 
     long countByExample(CProjTaskExample example);

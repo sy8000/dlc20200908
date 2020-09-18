@@ -17,5 +17,16 @@ public class IProjectServiceImpl implements IProjectService {
         return projectMapper.selectByPrimaryKey("A-200618-0091");
     }
 
+    public int deleteProjectByPrimary(String billno){
+        return projectMapper.deleteByPrimaryKey(billno);
+    }
+
+    public Project getProjectByPrimaryKey(String billno){
+        return projectMapper.selectByPrimaryKey(billno);
+    }
+
+    public int updateProject(Project record){
+        return projectMapper.updateByPrimaryKey(record);
+    }
 
 }

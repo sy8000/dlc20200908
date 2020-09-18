@@ -23,14 +23,32 @@
           "target": "_self",
           "child": [
             {
-              "title": "基本档案设置",
-              "href": "pages/welcomemain",
+              "title": "报告重签",
+              "href": "/limsflow/reportReSign",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "任务管理",
               "href": "/task",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "移动端委托管理",
+              "href": "/limsflow/mobile",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "委托单变更",
+              "href": "/limsflow/projModify",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "手工委托审批",
+              "href": "/limsflow/projApprove",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
@@ -178,8 +196,28 @@
               "href": "/limsflow/ChargeManager",
               "icon": "fa fa-hourglass-end",
               "target": "_self"
+            },
+            {
+              "title": "lims web查询",
+              "href": "",
+              "icon": "fa fa-home",
+              "target": "_self",
+              "child": [
+                {
+                  "title": "委托单预览",
+                  "href": "/limsflow/ProjectPreview",
+                  "icon": "fa fa-hourglass-end",
+                  "target": "_self"
+                },
+                {
+                  "title": "任务清单ForLims",
+                  "href": "/limsflow/LimsTaskProcess",
+                  "icon": "fa fa-hourglass-end",
+                  "target": "_self"
+                }
+              ]
             }
-          ]
+            ]
         },
         {
           "title": "辅助工具",
@@ -218,6 +256,12 @@
               "href": "/uploadImage1",
               "icon": "fa fa-shield",
               "target": "_self"
+            },
+            {
+              "title": "测试模块",
+              "href": "http://10.0.11.82:8080/webroot/decision/view/report?viewlet=HFReport_new.cpt&taskid=A-200720-1109-02",
+              "icon": "fa fa-shield",
+              "target": "_self"
             }
           ]
         },
@@ -234,8 +278,26 @@
               "target": "_self"
             },
             {
-              "title": "上位机调试",
-              "href": "/uploadImage1",
+              "title": "任务管理看板",
+              "href": "http://10.0.11.82:8080/webroot/decision/view/form?viewlet=Laboratory_Kanban.frm",
+              "icon": "fa fa-shield",
+              "target": "_self"
+            },
+            {
+              "title": "报告审核看板",
+              "href": "http://10.0.11.82:8080/webroot/decision/view/form?viewlet=Engineer_Kanban.frm",
+              "icon": "fa fa-shield",
+              "target": "_self"
+            },
+            {
+              "title": "任务积压列表",
+              "href": "http://10.0.11.82:8080/webroot/decision/view/report?viewlet=Taskoverstock_Kanban.cpt",
+              "icon": "fa fa-shield",
+              "target": "_self"
+            },
+            {
+              "title": "测试员看板",
+              "href": "http://10.0.11.82:8080/webroot/decision/view/form?viewlet=Testor_Kanban.frm",
               "icon": "fa fa-shield",
               "target": "_self"
             }

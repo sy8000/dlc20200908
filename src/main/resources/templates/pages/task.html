@@ -41,8 +41,10 @@
                 <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="testing"> 试验中跳转 </button>
                 <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="engineer"> 工程师跳转 </button>
                 <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="report"> 报告签发跳转 </button>
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="taskend"> 任务终止 </button>
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="taskend"> 任务取消 </button>
                 <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="resultModify"> 结果修正 </button>
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="taskcancel"> 任务中止 </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="singlewhole"> 单项<->成套转换 </button>
             </div>
         </script>
 
@@ -230,7 +232,23 @@
                         dataType:"json",
                         success:function(res){
                             console.log(res);
-                            layer.alert('跳转成功');
+                            layer.alert('取消成功');
+                        }
+                    });
+                });
+            };
+
+            if (obj.event === 'taskcancel') {  // 监听删除操作
+                layer.confirm('确定将任务中止吗？', function (index) {
+                    $.ajax({
+                        type:"post",
+                        url:"/lims/updateToTaskcancel",
+                        data:JSON.stringify(data),
+                        contentType:"application/json;charset=utf-8",
+                        dataType:"json",
+                        success:function(res){
+                            console.log(res);
+                            layer.alert('中止成功');
                         }
                     });
                 });
@@ -261,6 +279,30 @@
                 });
             };
 
+            //resultModify新增任务修正
+            if (obj.event === 'singlewhole') {  // 监听删除操作
+                layer.confirm('此项操作将对委托单进行单项<->成套双向转换，是否确认？', function (index) {
+                    var loading = layer.load(2);
+                    $.ajax({
+                        type:"post",
+                        url:"/lims/singlewhole",
+                        data:JSON.stringify(data),
+                        contentType:"application/json;charset=utf-8",
+                        dataType:"json",
+                        success:function(res){
+                            console.log(res);
+                            layer.close(loading);
+                            if (res == -1){
+                                layer.alert('修正失败');
+                            }else {
+                                layer.alert('修正成功');
+                            }
+
+                        }
+                    });
+
+                });
+            };
 
 
 

@@ -22,7 +22,7 @@ public class TestSync {
         AnalysisThread analysisThread = new AnalysisThread();
         analysisThread.onlyAddAnalysisThread();
         analysisThread.addTestListThread();
-        //analysisThread.clearDuplicationData();
+        analysisThread.clearDuplicationData();
     }
 
 }

@@ -1,7 +1,10 @@
 package cn.besbing;
 
 import cn.besbing.CommonUtils.MaintainModel.SpringUtil;
+import cn.besbing.CommonUtils.Utils.MailDTO;
+import cn.besbing.Conctrollers.DataLoaderMailController;
 import cn.besbing.Cron.AnalysisThread;
+import cn.besbing.Dao.SmUserMapper;
 import cn.besbing.Entities.*;
 import cn.besbing.Service.Impl.*;
 import com.alibaba.fastjson.JSON;
@@ -13,11 +16,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.mail.Address;
+import javax.mail.SendFailedException;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DloadercloudApplication.class)
@@ -37,6 +43,60 @@ public class TestDatabase {
 
     @Autowired
     IComponentServiceImpl iComponentService;
+
+
+    @Autowired
+    MailServiceImpl mailService;
+
+    @Autowired
+    SmuserServiceImpl  smuserService;
+
+    @Autowired
+    IMergeExcelServiceImpl iMergeExcelService;
+
+
+    @Test
+    public void testDownload() throws Exception {
+        iMergeExcelService.clearSpireCompressLogoFlag("D:\\resignreport\\finalresign\\mutile1600249279698.pdf","D:\\resignreport\\finalresign\\1140.pdf");
+    }
+
+    private static Set<String> getInvalidAddress(SendFailedException e){
+        Set<String> mails = new HashSet<>();
+        for(Address address: e.getInvalidAddresses()){
+            mails.add(address.toString().trim());
+        }
+        return mails;
+    }
+
+
+    @Test
+    public void sendMails() throws InterruptedException {
+        /*List<Map<String,Object>> list = customerSqlService.selectList(" select nvl(trim(s.user_code),'-') code from sm_user s where s.islocked = 'N' and dr = 0 and user_code is not null ");
+        List<String> tArr = new ArrayList<>();
+        for (Map<String,Object> map : list){
+            tArr.add(map.get("code").toString());
+        }
+        String mailAddress[] = (String[]) tArr.toArray();*/
+        List<SmUser> list = smuserService.selectByExample(null);
+        List<String> codeList = new ArrayList<>();
+        for (SmUser s : list){
+            codeList.add(s.getUserCode() + "@hongfa.cn");
+        }
+        Object codeArr[] = codeList.toArray();
+        MailDTO mailDTO = new MailDTO();
+        mailDTO.setSubject("关于检测中心LIMS WEB软件使用满意度调查");
+        //mailDTO.setToUsers(new String[]{"1000514@hongfa.cn","1002437@hongfa.cn"});
+        //Object[] objectArray = { "A", "B", "C" };
+        String stringArray[] = Arrays.stream(codeArr).toArray(String[]::new);
+        mailDTO.setToUsers(stringArray);
+        for (int i = 0 ; i< stringArray.length;i++){
+            mailDTO.setToUsers(new String[]{stringArray[i]});
+            logger.info("------------{}:{}",i,stringArray[i]);
+            //.sleep(2000);
+            mailService.sendImgMail(mailDTO);
+        }
+        //mailService.sendImgMail(mailDTO);
+    }
 
 
     @Test

@@ -1,27 +1,27 @@
 package cn.besbing.Conctrollers;
 
+import cn.besbing.CommonUtils.MaintainModel.PageDataResult;
+import cn.besbing.CommonUtils.MaintainModel.SearchDTO;
 import cn.besbing.CommonUtils.MaintainModel.UpdateLimsBillStatus;
-import cn.besbing.Entities.Component;
-import cn.besbing.Entities.ComponentDefKey;
-import cn.besbing.Entities.Result;
-import cn.besbing.Service.Impl.CustomerSqlServiceImpl;
-import cn.besbing.Service.Impl.IComponentServiceImpl;
-import cn.besbing.Service.Impl.ResultServiceImpl;
+import cn.besbing.Entities.*;
+import cn.besbing.Service.Impl.*;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/lims")
@@ -38,6 +38,24 @@ public class LimsFlagController {
 
     @Autowired
     IComponentServiceImpl iComponentService;
+
+    @Autowired
+    TaskInfoServiceImpl taskInfoService;
+
+    @Autowired
+    ICprojTaskServiceImpl cprojTaskService;
+
+    @Autowired
+    IProjectServiceImpl projectService;
+
+    @Autowired
+    IQcCommissionHServiceImpl qcCommissionHService;
+
+    @Autowired
+    IMergeExcelServiceImpl mergeExcelService;
+
+    @Autowired
+    DownloadServiceImpl downloadService;
 
     //@Transactional(rollbackFor = Exception.class)
     @RequestMapping(value = "/updateToSign",method = RequestMethod.POST)
@@ -154,6 +172,7 @@ public class LimsFlagController {
      * 任务取消跳转
      * @param taskIds
      * @return
+     * 逻辑描述：单任务取消，后续标志位不写，任务就地刷成标志位'F'状态（不更新到nc），任务表的description字段回写‘任务取消’字样
      */
     @RequestMapping(value = "/updateToTaskend",method = RequestMethod.POST)
     @ResponseBody
@@ -161,12 +180,33 @@ public class LimsFlagController {
         int flag = 0;
         JSONArray jsonArray = JSONArray.parseArray(taskIds);
         JSONObject jsonObject = new JSONObject();
-        //UpdateLimsBillStatus updateLimsBillStatus = new UpdateLimsBillStatus();
-        //List<String> taskidList = new ArrayList<String>();
         for (int i=0;i<jsonArray.size();i++){
             jsonObject = jsonArray.getJSONObject(i);
-            //taskidList.add(jsonObject.get("taskId").toString());
-            flag += customerSqlService.update("update c_proj_task set status = 'F' where task_id = '"+ jsonObject.get("taskId").toString() +"' ");
+            flag += customerSqlService.update("update c_proj_task set status = 'F',description = description || ' 任务取消' where task_id = '"+ jsonObject.get("taskId").toString() +"' ");
+            customerSqlService.update("update c_arrangement ca set ca.status = 'F' where ca.task_id = '"+ jsonObject.get("taskId").toString() +"'");
+            customerSqlService.update("update c_proj_task cpt set cpt.c_address = '任务取消:' || to_char(sysdate,'yyyy-mm-dd') where cpt.task_id = '"+ jsonObject.get("taskId").toString() + "'");
+        }
+        return String.valueOf(flag);
+    }
+
+
+    /**
+     * 任务终止跳转
+     * @param taskIds
+     * @return
+     * 逻辑描述：单任务取消，任务就地将当前日期刷满后续标志位，单据刷成'已签发'状态，cpt.c_address回写字样'任务中止'
+     */
+    @RequestMapping(value = "/updateToTaskcancel",method = RequestMethod.POST)
+    @ResponseBody
+    public String updateToTaskcancel(@RequestBody String taskIds){
+        int flag = 0;
+        JSONArray jsonArray = JSONArray.parseArray(taskIds);
+        JSONObject jsonObject = new JSONObject();
+        for (int i=0;i<jsonArray.size();i++){
+            jsonObject = jsonArray.getJSONObject(i);
+            flag += customerSqlService.update("update c_proj_task set description = description || ' 任务终止' where task_id = '"+ jsonObject.get("taskId").toString() +"' ");
+            customerSqlService.update("update c_arrangement ca set ca.status = 'F' where ca.task_id = '"+ jsonObject.get("taskId").toString() +"'");
+            customerSqlService.update("update c_proj_task cpt set cpt.c_address = '任务中止:' || to_char(sysdate,'yyyy-mm-dd') where cpt.task_id = '"+ jsonObject.get("taskId").toString() + "'");
         }
         return String.valueOf(flag);
     }
@@ -222,7 +262,9 @@ public class LimsFlagController {
                         Result result = resultTemplate;
                         result.setSampleNumber(Long.valueOf(lArr[0]));
                         result.setTestNumber(Long.valueOf(lArr[1]));
-                        result.setResultNumber(Long.valueOf(getResultNumber(resultNo)));
+                        //修正bug防止每次从头开始
+                        resultNo = getResultNumber(resultNo);
+                        result.setResultNumber(Long.valueOf(resultNo));
                         result.setOrderNumber(c.getOrderNumber());
                         result.setAnalysis(rightAnalysis);
                         result.setName(c.getName());
@@ -274,6 +316,160 @@ public class LimsFlagController {
     }
 
 
+    @RequestMapping(value = "/singlewhole",method = RequestMethod.POST)
+    @ResponseBody
+    public String updateWholeSingle(@RequestBody String taskIds){
+        String flag = "-1";
+        String singlePk = "A1A3C72C33E77947E053";
+        String wholePk = "A1A3C72C33E67947E053";
+        String single = "单项";
+        String whole = "成套";
+        //int num = 1;
+        List<String> projectList = new ArrayList<>();
+        JSONArray jsonArray = JSONArray.parseArray(taskIds);
+        List<String> list = new ArrayList();
+        Project project = null;
+        QcCommissionH qcCommissionH = null;
+        Project projectNew = null;
+        QcCommissionH qcCommissionHNew = null;
+        if (jsonArray.size() > 0){
+            for (int i=0;i<jsonArray.size();i++){
+                list.add(jsonArray.getJSONObject(i).get("project").toString());
+            }
+            try{
+                projectList = new ArrayList<String>(new TreeSet<String>(list));
+                for (String projectName : projectList){
+                    //project表更新
+                    project = projectService.getProjectByPrimaryKey(projectName);
+                    projectNew = project;
+                    qcCommissionH = qcCommissionHService.selectQMHByBillno(projectName);
+                    qcCommissionHNew = qcCommissionH;
+                    if ("单项".equals(project.getcCoaFormat().trim())){
+                        //projectNew.setcCoaFormat(whole);
+                        //qcCommissionHNew.setReportformat(wholePk);
+                        customerSqlService.update("update project set c_coa_format = '" + whole + "' where name = '"+ projectName + "'" );
+                        customerSqlService.update("update qc_commission_h set reportformat = '"+ wholePk +"' where billno = '" + projectName + "'");
+                    }
+                    if ("成套".equals(project.getcCoaFormat().trim())){
+                        //projectNew.setcCoaFormat(single);
+                        //qcCommissionHNew.setReportformat(singlePk);
+                        customerSqlService.update("update project set c_coa_format = '" + single + "' where name = '"+ projectName + "'" );
+                        customerSqlService.update("update qc_commission_h set reportformat = '"+ singlePk +"' where billno = '" + projectName + "'");
+                    }
+                    //projectService.updateProject(projectNew);
+                    //qcCommissionHService.updateQcCommH(qcCommissionHNew);
+                }
+                flag = "1";
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return flag;
+    }
 
+    /**
+     * 报告重签：报告下载前处理
+     */
+    @RequestMapping(value = "/processReport",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject processReport(@RequestBody String jsonStr){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status",0);
+        jsonObject.put("des","转换错误");
+        String target = "";
+        List<String> targetList = new ArrayList<String>();
+        logger.info("开始处理excel....");
+        JSONArray json = JSONArray.parseArray(jsonStr);
+        //获取时间戳
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        try{
+            //excel转pdf
+            List<String> sourceExcel = new ArrayList<String>();
+            for (int i = 0 ; i < json.size() ; i++){
+                target = (json.get(i).toString()).substring(0,(json.get(i).toString()).lastIndexOf("."));
+                mergeExcelService.excel2pdf("D:\\resignreport\\" + json.get(i).toString(),"D:\\resignreport\\mergeExcel\\" + target + ".pdf");
+                targetList.add("D:\\resignreport\\mergeExcel\\" + target + ".pdf");
+            }
+            //pdf合并
+            List<File> filesList = new ArrayList<File>();
+            for (String fileName : targetList){
+                filesList.add(new File(fileName));
+            }
+            if (filesList.size() > 1) {
+                File f = mergeExcelService.mulFile2One(filesList, "D:\\resignreport\\mergeExcel\\mutile" + timestamp + ".pdf");
+            }else {
+                for (File file:filesList){
+                    Files.copy(file.toPath(),new File("D:\\resignreport\\mergeExcel\\mutile" + timestamp + ".pdf").toPath());
+                }
+            }
+            //pdf签章加密
+
+            //pdf压缩  D:\resignreport\finalpdfs
+            mergeExcelService.CompressPdf("D:\\resignreport\\mergeExcel\\mutile"+ timestamp +".pdf","D:\\resignreport\\finalpdfs\\finalpdf" + timestamp +".pdf");
+            //去除压缩的水印
+            mergeExcelService.clearSpireCompressLogoFlag("D:\\resignreport\\finalpdfs\\finalpdf" + timestamp +".pdf","D:\\resignreport\\finalresign\\resign"+ timestamp +".pdf");
+            //下载
+            //String finalName = "D:\\resignreport\\finalresign\\resign"+ timestamp +".pdf";
+
+            //String finalName = "/finalReport/" + "resign"+ timestamp +".pdf";
+            String finalName = "resign"+ timestamp +".pdf";
+            //ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            //HttpServletResponse response = servletRequestAttributes.getResponse();
+            //downloadService.downloadFile(response,finalName);
+            //downloadService.downLoad(response,finalName);
+
+
+
+            jsonObject.put("status",200);
+            jsonObject.put("file",finalName);
+            jsonObject.put("des","转换完成");
+        }catch (Exception e){
+            logger.error("处理excel出错");
+        }
+        logger.info("结束处理excel....");
+        return jsonObject;
+    }
+
+
+
+
+
+    /**
+     * 查找待生成的报告
+     * @param jsonStr
+     * @return
+     */
+    @RequestMapping(value = "/searchReport",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject searchReport(@RequestBody String jsonStr){
+        logger.info("================{}",SecurityUtils.getSubject().getPrincipal().toString());
+        System.out.println(SecurityUtils.getSubject().getPrincipal().toString());
+        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+        String taskid = jsonObject.get("taskid").toString();
+        List<CProjTask> cptList = cprojTaskService.getTaskForReport(taskid);
+        logger.info("报告重签功能:开始检索报告...");
+        List jsonList = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray();
+        if (cptList.size() > 0 && cptList != null){
+            jsonObject.put("status","1");
+            jsonObject.put("des","检索成功，共计" + cptList.size() + "条记录");
+            jsonObject.put("size",cptList.size());
+            String filePath = null;
+            for (CProjTask cProjTask : cptList){
+                //此处组装的为三个东西，序列号、任务号、报告excel的文件地址
+                filePath = customerSqlService.selectOne("select r.report_file_name from report_upload_record r where r.isprocess = 'T' and r.isupload = 'T' and r.report_from_taskid = '" + cProjTask.getTaskId() + "'");
+                jsonList.add(cProjTask.getTaskId() + ":" + filePath);
+                jsonArray.add(cProjTask.getTaskId() + ":" + filePath);
+            }
+            //检索到报告
+            jsonObject.put("data",jsonArray);
+        }else {
+            //未检索到报告
+            jsonObject.put("status","-1");
+            jsonObject.put("des","未检索到您查找的报告，请确认单据号");
+        }
+        logger.info("报告重签功能:检索报告结束...");
+        return jsonObject;
+    }
 
 }

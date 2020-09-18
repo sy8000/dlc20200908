@@ -6,6 +6,8 @@ import cn.besbing.Service.ICprojTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class ICprojTaskServiceImpl implements ICprojTaskService {
@@ -17,6 +19,8 @@ public class ICprojTaskServiceImpl implements ICprojTaskService {
         return cProjTaskMapper.selectByPrimaryKey(Long.valueOf(15019));
     }
 
-
+    public List<CProjTask> getTaskForReport(String taskid){
+        return cProjTaskMapper.selectByTaskIdForReport(taskid);
+    }
 
 }

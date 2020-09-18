@@ -2,6 +2,7 @@ package cn.besbing;
 
 
 import cn.besbing.CommonUtils.Utils.MailDTO;
+import cn.besbing.Service.Impl.IMergeExcelServiceImpl;
 import cn.besbing.Service.Impl.MailServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = DloadercloudApplication.class)
 public class TestMail {
 
-    @Autowired
+    /*@Autowired
     MailServiceImpl mailService;
 
     @Test
@@ -22,6 +23,15 @@ public class TestMail {
         mailDTO.setContext("auto mail");
         mailDTO.setToUsers(new String[]{"1002437@hongfa.cn", "1000514@hongfa.cn"});
         mailService.sendMail(mailDTO);
+    }*/
+
+    @Autowired
+    IMergeExcelServiceImpl mergeExcelService;
+
+    @Test
+    public void abc(){
+        mergeExcelService.clearSpireCompressLogoFlag("D:\\resignreport\\finalpdfs\\finalpdf1599895175561.pdf","D:\\resignreport\\finalpdfs\\sheny.pdf");
+
     }
 
 

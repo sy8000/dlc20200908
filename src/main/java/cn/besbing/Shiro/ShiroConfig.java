@@ -28,7 +28,17 @@ public class ShiroConfig {
         // 配置不会被拦截的链接 顺序判断
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/itf/**", "anon");
+        filterChainDefinitionMap.put("/forgetPass", "anon");
+        filterChainDefinitionMap.put("/resetPwd", "anon");
+        filterChainDefinitionMap.put("/resetPass", "anon");
+        filterChainDefinitionMap.put("/report", "anon");
+        filterChainDefinitionMap.put("/confirmPassword", "anon");
+        filterChainDefinitionMap.put("/validurl", "anon");
         filterChainDefinitionMap.put("/valid", "anon");
+        filterChainDefinitionMap.put("/taskProcess", "anon");
+        filterChainDefinitionMap.put("/AllTaskProgess", "anon");
+        filterChainDefinitionMap.put("/lims/mobile", "anon");
+        //filterChainDefinitionMap.put("/lims/updateWholeToSingle", "anon");
         filterChainDefinitionMap.put("/getParameters", "anon");
         filterChainDefinitionMap.put("/upLoadParameters", "anon");
         filterChainDefinitionMap.put("/getAllUserFromLims", "anon");

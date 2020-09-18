@@ -9,7 +9,7 @@ public class TestPasswd {
 
     @Test
     public  void pass() {
-        String pwd = "123qwe";
+        String pwd = "Sy19820426";
         String passwd = NC6PasswordUtil.getEncodedPassword("1001TR1000000000096V", pwd);
         System.out.println(passwd);
     }
