@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LIMS WEB任务列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="../../static/js/jquery-3.4.1.min.js" charset="UTF-8"></script>
+    <link rel="stylesheet" href="../../static/framework/layuimini/layuimini/lib/layui-v2.5.5/css/layui.css" media="all">
+    <script src="../../static/framework/layuimini/layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script src="../../static/js/lims/AllTaskFromNC.js"></script>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>LIMS WEB任务列表</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">单据号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="taskid" id="taskid"  autocomplete="off" class="layui-input"  placeholder="请输入任务单号" >
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">任务状态</label>
+                            <div class="layui-input-inline">
+                                <select name="taskStatus" lay-verify="required" lay-search id="taskStatus">
+                                    <option value="000">全部</option>
+                                    <option value="001">已保存</option>
+                                    <option value="002">客户主管审批</option>
+                                    <option value="003">技术主管审批</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+    </div>
+</div>
+</body>
+</html>

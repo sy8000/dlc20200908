@@ -148,6 +148,9 @@ public class LimsController {
         return "pages/mobile/ListIndex";
     }
 
-
+    @RequestMapping(value = "/AISearch",method = RequestMethod.GET)
+    public String aisearch(){
+        return "pages/AiSearch.html";
+    }
 
 }

@@ -281,7 +281,15 @@ public class IMergeExcelServiceImpl implements IMergeExcelService {
             logoimage.setAbsolutePosition(425,750);
             logoimage.scalePercent(100,100);
 
+            PdfGState gs3 = new PdfGState();
+            gs3.setFillOpacity(0.5f);
+            Image logoOverlay = Image.getInstance(IOUtils.toByteArray(new FileInputStream("D:\\resignreport\\signtools\\xs2.png")));
+            logoOverlay.setAbsolutePosition(100,250);
+            logoOverlay.scalePercent(150,100);
+
             for(int i=1 ; i < total ; i++){
+
+                /*
                 content = stamper.getUnderContent(i);
                 content.beginText();
                 content.setColorFill(BaseColor.GRAY);
@@ -292,23 +300,40 @@ public class IMergeExcelServiceImpl implements IMergeExcelService {
                 //写入水印
                 content.showTextAligned(Element.ALIGN_LEFT,"HFLIMS",400,100,42);
                 content.endText();
+                 */
 
                 if (i > 1){
                     contentPage = stamper.getUnderContent(i);
                     contentPage.beginText();
                     contentPage.setColorFill(BaseColor.BLACK);
-                    contentPage.setFontAndSize(fontPage,14);
+                    contentPage.setFontAndSize(fontPage,10);
                     contentPage.setTextMatrix(300,900);
-                    contentPage.showTextAligned(Element.ALIGN_CENTER,"Page  "+ String.valueOf(i-1) + "  of  " + String.valueOf(reader.getNumberOfPages() - 1) ,300,20,0);
+                    contentPage.showTextAligned(Element.ALIGN_CENTER,"Page  "+ String.valueOf(i) + "  of  " + String.valueOf(reader.getNumberOfPages()) ,300,20,0);
                     contentPage.endText();
 
                     contentLogo = stamper.getUnderContent(i);
                     contentLogo.beginText();
                     contentLogo.addImage(logoimage);
+                    contentLogo.addImage(logoOverlay);
                     contentLogo.endText();
+
+                    /**
+                     * 除第一页封面外全部加logo
+                     */
+
                 }
 
                 if (i == 1){
+                    /*封面页的偏移页码*/
+                    contentPage = stamper.getUnderContent(i);
+                    contentPage.beginText();
+                    contentPage.setColorFill(BaseColor.BLACK);
+                    contentPage.setFontAndSize(fontPage,10);
+                    contentPage.setTextMatrix(300,900);
+                    contentPage.showTextAligned(Element.ALIGN_CENTER,"Page  "+ String.valueOf(i) + "  of  " + String.valueOf(reader.getNumberOfPages()) ,-50,-50,0);
+                    contentPage.endText();
+
+
                     contentHF = stamper.getUnderContent(i);
                     contentHF.beginText();
                     contentHF.addImage(image);

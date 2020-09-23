@@ -301,6 +301,27 @@
               "icon": "fa fa-shield",
               "target": "_self"
             }
+
+          ]
+        },
+        {
+          "title": "AI智能",
+          "href": "",
+          "icon": "fa fa-snowflake-o",
+          "target": "",
+          "child": [
+            {
+              "title": "智能联查",
+              "href": "/limsflow/AISearch",
+              "icon": "fa fa-snowflake-o",
+              "target": "_self"
+            },
+            {
+              "title": "智能单据分析",
+              "href": "/limsflow/aibillanalysis",
+              "icon": "fa fa-shield",
+              "target": "_self"
+            }
           ]
         }
       ]
@@ -397,6 +418,7 @@
             }
           ]
         },
+
         {
           "title": "失效菜单",
           "href": "page/error.html",
